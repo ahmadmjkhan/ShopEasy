@@ -54,6 +54,7 @@
             <!-- footer --->
 
             @include('layouts.inc.seller_footer')
+            hello DEv Beta
 
             <!----- footer ---->
 
