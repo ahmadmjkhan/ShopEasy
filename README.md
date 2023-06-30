@@ -45,7 +45,7 @@ Some Git Important Tips
  ->Fork the target repository
  ->clone the repo in your local machine in a Folder
  ->run npm install command
- ->git checkout -b <branch Name> (make a branch with specified name which code you want to write     ex-Checkout-page)
+ ->git checkout -b <branch Name> (make a branch with specified name which code you want to write ex-Checkout-page)
 
  ->git add .
  ->git commit -m "Making Checkout pages"
