@@ -1,4 +1,4 @@
-An E-commerce Website Develop on Laravel Framework
+An E-commerce Website Develop on Laravel Frameworks
 
 Some Git Important Tips
 
