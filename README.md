@@ -21,29 +21,29 @@
 
 3-**How Make Branch in Git**
 
-•	git checkout -b
+•	git checkout -b <branch_name>
 
 •	git add .
 
 •	git commit -m "Message"
 
-•	git checkout (to switch on another branch)
+•	git checkout <branch_name> (to switch on another branch)
 
 •	git branch (to know all branches)
 
-•	git merge (command to merge branch in master branch all their changes in code)
+•	git merge <branch_name> (command to merge branch in master branch all their changes in code)
 
-•	git push origin (push your branch on remote branch)
+•	git push origin <branch_name> (push your branch on remote branch)
 
-•	git push -d origin (delete your branch from remote)
+•	git push -d origin <branch_name> (delete your branch from remote)
 
 •	git branch --merged (show already merged branches)
 
 •	git branch --no-merged (show not merged branches)
 
-•	git branch -d (delete your branch and got error if not merged)
+•	git branch -d <branch_name> (delete your branch and got error if not merged)
 
-•	git branch -D (delete your branch without merged )
+•	git branch -D <branch_name> (delete your branch without merged )
 
 4- **How Push Your Project on Remote**
 
@@ -69,15 +69,19 @@
 
 •	Fork the target repository
 
-•	clone the repo in your local machine in a Folder
+•	clone the repo in your local machine in a New Folder
 
 •	run npm install command
 
-•	git checkout -b (make a branch with specified name which code you want to write ex-Checkout-page)
+•	git checkout -b <branch_name> (make a branch with specified name which code you want to write ex-Checkout-page)
 
 •	git add .
 
-•	git commit -m "Making Checkout pages" ->git push origin (Push your branch in your own Fork) ->create a PR(pull request): go to your fork repo and choose (Compare and Pull Request),open Pull Request and reviews
+•	git commit -m "Making Checkout pages" 
+
+•	git push origin <branch_name> (Push your branch in your own Fork) 
+
+•	create a PR(pull request): go to your fork repo and choose (Compare and Pull Request),open Pull Request and reviews
 
 •	now author open his GitHub account and see your pull request and merge it his in code by opening their project in editor and write     command ->git pull origin master
 
