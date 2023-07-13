@@ -70,7 +70,7 @@ Categories
 
 
                             <td>
-
+                                @if($categoryModule['edit_access']==1 || $categoryModule['full_access']==1)
                                 <!--- Status Active/Inactive --->
                                 @if($cat->status == '1')
                                 <a href="javascript:void(0)" class="updatecategorystatus" id="category-{{$cat->id}}" category_id="{{$cat->id}}">
@@ -81,10 +81,10 @@ Categories
                                     </a>
                                     @endif
                                     <!--- Status in Active closed --->
-
+                                    @endif
                             </td>
                             <td>
-
+                                @if($categoryModule['edit_access']==1 || $categoryModule['full_access']==1)
                                 <!--- Status Active/Inactive --->
                                 @if($cat->popular == '1')
                                 <a href="javascript:void(0)" class="updatepopularcategory" id="popular-{{$cat->id}}" category_id="{{$cat->id}}">
@@ -96,19 +96,18 @@ Categories
                                 </a>
                                 @endif
                                 <!--- Status in Active closed --->
-
+                                @endif
                             </td>
                             <td>
+                                @if($categoryModule['edit_access']==1 || $categoryModule['full_access']==1)
                                 <a href="" title="View Category" class="float-left btn-sm btn btn-primary mx-1"><i class="icon-copy fa fa-eye" aria-hidden="true"></i></a>
-
-
-
                                 <a href="{{url('admin/add-edit-category',$cat->id)}}" title="Edit Category" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-edit"></i></a>
-
+                                @endif
+                                @if($categoryModule['full_access'] == 1)
                                 <form action="{{route('admin.delete_category',$cat->id)}}" class="delete_form_operation " style="display:inline;" method="post">@csrf
                                     <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
-
+                                @endif
                             </td>
 
                         </tr>

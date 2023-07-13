@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Products; ?>
-@extends('layouts.frontend-app')
+@extends('frontend.layouts.frontend-master-layout')
 
 
 @section('content')

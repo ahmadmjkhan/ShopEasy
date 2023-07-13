@@ -6,6 +6,7 @@ use App\Models\Brand;
 use App\Models\Product;
 use App\Models\Section;
 use App\Models\Category;
+use App\Models\AdminRole;
 use Illuminate\Http\Request;
 use App\Models\ProductFilter;
 use App\Models\ProductAttribute;
@@ -27,8 +28,22 @@ class AdminProductController extends Controller
             $query->select('id', 'category_name');
         }])->get();
 
+        //Set Admin/Subadmin for Category //
 
-        return view('backend.admin.product-management.products.product-index')->with(compact('products'));
+        $productModuleCount = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'products'])->count();
+        if(Auth::guard('admin')->user()->type=='SuperAdmin'){
+            $productModule['view_access'] =1;
+            $productModule['edit_acccess'] =1;
+            $productModule['full_access'] =1;
+        }elseif($productModuleCount==0){
+               $message = "This feature is Restricted For You";
+               return redirect('admin/dashboard')->with('error_message',$message);
+        }else{
+            $productModule = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'products'])->first()->toArray();
+        }
+
+
+        return view('backend.admin.product-management.products.product-index')->with(compact(['products','productModule']));
     }
 
     public function updateproductstatus(Request $request)
@@ -201,6 +216,7 @@ class AdminProductController extends Controller
                 $products->product_price = $request->product_price;
                 $products->product_discount = $request->product_discount;
                 $products->product_weight = $request->product_weight;
+                $products->product_gst = $request->product_gst;
                 $products->short_description = $request->short_description;
                 $products->long_description = $request->long_description;
                 $products->meta_title = $request->meta_title;

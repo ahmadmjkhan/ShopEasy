@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Product;
+use App\Models\Wishlist;
 use App\Models\ProductFilter;
 
 
@@ -34,25 +35,24 @@ $productFilters = ProductFilter::productFilters();
                     <div class="product-details-images slider-navigation-1">
 
                         @foreach($productdetails->multiple_images as $multiple)
-                        <div class="lg-image"><img src="{{asset('uploads/catalogue-images/products/multiple-images/large/'.$multiple->images)}}" alt="product image thumb"></div>
+                        <div class="lg-image">
+                            <a class="popup-img venobox vbox-item" href="images/product/large-size/1.jpg" data-gall="myGallery">
+                                <img src="{{asset('uploads/catalogue-images/products/multiple-images/large/'.$multiple->images)}}" alt="product image">
+                            </a>
+                        </div>
                         @endforeach
-                        <!-- <img src="{{asset('uploads/images/products/small/'.$productdetails->product_image)}}" alt="product image"> -->
-
 
                     </div>
-                    <div class="product-details-thumbs slider-thumbs-1 mt-3">
 
-
+                    <div class="product-details-thumbs slider-thumbs-1" style="margin-top: 40px;">
                         @foreach($productdetails->multiple_images as $multiple)
-                        <div class="sm-image"><img src="{{asset('uploads/catalogue-images/products/multiple-images/small/'.$multiple->images)}}" alt="product image thumb"></div>
+                        <div class="sm-image"><img src="{{asset('uploads/catalogue-images/products/multiple-images/large/'.$multiple->images)}}" alt="product image thumb"></div>
+
+
                         @endforeach
 
-                        <!-- <div class="sm-image"><img src="images/product/small-size/2.jpg" alt="product image thumb"></div>
-                        <div class="sm-image"><img src="images/product/small-size/3.jpg" alt="product image thumb"></div>
-                        <div class="sm-image"><img src="images/product/small-size/4.jpg" alt="product image thumb"></div>
-                        <div class="sm-image"><img src="images/product/small-size/5.jpg" alt="product image thumb"></div>
-                        <div class="sm-image"><img src="images/product/small-size/6.jpg" alt="product image thumb"></div> -->
                     </div>
+
                 </div>
                 <!--// Product Details Left -->
             </div>
@@ -79,13 +79,21 @@ $productFilters = ProductFilter::productFilters();
                         <span class="product-details-ref">{{$productdetails->categories->category_name}}</span>
                         <div class="rating-box pt-20">
                             <ul class="rating rating-with-review-item">
-                                <li><i class="fa fa-star-o"></i></li>
+                                @if($avgStarRating>0)
+                                <?php $star = 1;
+                                while ($star <= $avgStarRating) { ?>
+
+                                    <span>&#9733;</span>
+                                    <?php $star++;
+                                } ?>({{$avgRating}})
+                                    @endif
+                                    <!-- <li><i class="fa fa-star-o"></i></li>
                                 <li><i class="fa fa-star-o"></i></li>
                                 <li><i class="fa fa-star-o"></i></li>
                                 <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                <li class="review-item"><a href="#">Read Review</a></li>
-                                <li class="review-item"><a href="#">Write Review</a></li>
+                                <li class="no-star"><i class="fa fa-star-o"></i></li> -->
+                                    <li class="review-item"><a href="#">Read Review</a></li>
+                                    <li class="review-item"><a href="#" data-toggle="modal" data-target=".mymodal">Write Review</a></li>
                             </ul>
                         </div>
                         <?php
@@ -178,7 +186,7 @@ $productFilters = ProductFilter::productFilters();
                                         <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                     </div>
                                 </div>
-                                <button class="add-to-cart" type="submit">Add to cart</button>
+                                <button class="add-to-cart btn btn-info btn-sm" type="submit">Add to cart</button>
 
                             </div>
                         </form>
@@ -197,7 +205,21 @@ $productFilters = ProductFilter::productFilters();
 
 
                         <div class="product-additional-info pt-25">
-                            <a class="wishlist-btn" href="wishlist.html"><i class="fa fa-heart-o"></i>Add to wishlist</a>
+                            @if(Auth::check())
+                            <?php $countWishlist = 0; ?>
+                            <?php $countWishlist = Wishlist::countWishlist($productdetails->id);
+
+                            ?>
+                            <a class="wishlist-btn updateWishlist" data-productid="{{$productdetails->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif </a>
+                            <label for="">Add To wishlist</label>
+
+                            
+                            
+                            @else
+                            <a class="wishlist-btn"><i class="fa fa-heart-o"></i></a>
+                            <label for="">Add To wishlist</label>
+                            @endif
+                            
 
                         </div>
                         <div class="block-reassurance">
@@ -254,136 +276,77 @@ $productFilters = ProductFilter::productFilters();
         <div class="tab-content">
             <div id="description" class="tab-pane active show" role="tabpanel">
                 <div class="product-description">
-                    <span>The best is yet to come! Give your walls a voice with a framed poster. This aesthethic, optimistic poster will look great in your desk or in an open-space office. Painted wooden frame with passe-partout for more depth.</span>
+                    <span>{{$productdetails->short_description}}</span>
                 </div>
             </div>
             <div id="product-details" class="tab-pane" role="tabpanel">
                 <div class="product-details-manufacturer">
                     <a href="#">
-                        <img src="images/product-details/1.jpg" alt="Product Manufacturer Image">
+                        <img src="{{asset('uploads/catalogue-images/products/large/'.$productdetails->product_image)}}" alt="Product Manufacturer Image" width="100">
                     </a>
-                    @foreach($productFilters as $filter)
-                    @if(isset($productdetails->category_id))
-                    <?php
-                    $filterAvailable = ProductFilter::filterAvailable($filter->id, $productdetails->category_id);
-                    ?>
-
-                    @if($filterAvailable == "Yes")
-
-                    <p><span>{{$filter->filter_name}}</span>
-
-                        @foreach($filter->filter_values as $value)
-
-                        @if(!empty($productdetails->{$filter['filter_column']}) && $value->filter_value==$productdetails->{$filter['filter_column']})
-                        {{ucwords($value->filter_value)}}
-
-                        @endif
-                        @endforeach
-
-                    </p>
-
-                    @endif
-                    @endif
-                    @endforeach
+                    
                 </div>
             </div>
-            <div id="reviews" class="tab-pane" role="tabpanel">
-                <div class="product-reviews">
-                    <div class="product-details-comment-block">
-                        <div class="comment-review">
-                            <span>Grade</span>
-                            <ul class="rating">
-                                <li><i class="fa fa-star-o"></i></li>
-                                <li><i class="fa fa-star-o"></i></li>
-                                <li><i class="fa fa-star-o"></i></li>
-                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                            </ul>
-                        </div>
-                        <div class="comment-author-infos pt-25">
-                            <span>HTML 5</span>
-                            <em>01-12-18</em>
-                        </div>
-                        <div class="comment-details">
-                            <h4 class="title-block">Demo</h4>
-                            <p>Plaza</p>
-                        </div>
-                        <div class="review-btn">
-                            <a class="review-links" href="#" data-toggle="modal" data-target="#mymodal">Write Your Review!</a>
-                        </div>
-                        <!-- Begin Quick View | Modal Area -->
-                        <div class="modal fade modal-wrapper" id="mymodal">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-body">
-                                        <h3 class="review-page-title">Write Your Review</h3>
-                                        <div class="modal-inner-area row">
-                                            <div class="col-lg-6">
-                                                <div class="li-review-product">
-                                                    <img src="images/product/large-size/3.jpg" alt="Li's Product">
-                                                    <div class="li-review-product-desc">
-                                                        <p class="li-product-name">Today is a good day Framed poster</p>
-                                                        <p>
-                                                            <span>Beach Camera Exclusive Bundle - Includes Two Samsung Radiant 360 R3 Wi-Fi Bluetooth Speakers. Fill The Entire Room With Exquisite Sound via Ring Radiator Technology. Stream And Control R3 Speakers Wirelessly With Your Smartphone. Sophisticated, Modern Design </span>
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="li-review-content">
-                                                    <!-- Begin Feedback Area -->
-                                                    <div class="feedback-area">
-                                                        <div class="feedback">
-                                                            <h3 class="feedback-title">Our Feedback</h3>
-                                                            <form action="#">
-                                                                <p class="your-opinion">
-                                                                    <label>Your Rating</label>
-                                                                    <span>
-                                                                        <select class="star-rating">
-                                                                            <option value="1">1</option>
-                                                                            <option value="2">2</option>
-                                                                            <option value="3">3</option>
-                                                                            <option value="4">4</option>
-                                                                            <option value="5">5</option>
-                                                                        </select>
-                                                                    </span>
-                                                                </p>
-                                                                <p class="feedback-form">
-                                                                    <label for="feedback">Your Review</label>
-                                                                    <textarea id="feedback" name="comment" cols="45" rows="8" aria-required="true"></textarea>
-                                                                </p>
-                                                                <div class="feedback-input">
-                                                                    <p class="feedback-form-author">
-                                                                        <label for="author">Name<span class="required">*</span>
-                                                                        </label>
-                                                                        <input id="author" name="author" value="" size="30" aria-required="true" type="text">
-                                                                    </p>
-                                                                    <p class="feedback-form-author feedback-form-email">
-                                                                        <label for="email">Email<span class="required">*</span>
-                                                                        </label>
-                                                                        <input id="email" name="email" value="" size="30" aria-required="true" type="text">
-                                                                        <span class="required"><sub>*</sub> Required fields</span>
-                                                                    </p>
-                                                                    <div class="feedback-btn pb-15">
-                                                                        <a href="#" class="close" data-dismiss="modal" aria-label="Close">Close</a>
-                                                                        <a href="#">Submit</a>
-                                                                    </div>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <!-- Feedback Area End Here -->
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+
+
+
+
+
+            
+
+
+
+
+
+                <div id="reviews" class="tab-pane" role="tabpanel">
+                    <div class="product-reviews">
+                        <div class="product-details-comment-block">
+                            @if(count($ratings)>0)
+                            @foreach($ratings as $rating)
+                            <div class="comment-review">
+                                <span>Grade</span>
+                                <ul class="rating">
+                                    <?php
+                                    $count = 1;
+                                    while ($count <= $rating['rating']) { ?>
+
+                                        <span>&#9733;</span>
+
+                                    <?php $count++;
+                                    } ?>
+
+                                    <!-- <li><i class="fa fa-star-o"></i></li>
+                                    <li><i class="fa fa-star-o"></i></li>
+                                    <li><i class="fa fa-star-o"></i></li>
+                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                    <li class="no-star"><i class="fa fa-star-o"></i></li> -->
+                                </ul>
                             </div>
+
+
+                            <div class="comment-author-infos pt-25">
+                                <span>{{$rating['user']['name']}}</span>
+                                <em>01-12-18</em>
+                            </div>
+                            <div class="comment-details">
+                                <h4 class="title-block">Review</h4>
+                                <p>{{$rating['reviews']}}</p>
+                            </div>
+                            @endforeach
+
+                            @else
+                            <p>
+                                <b>Review Are not Available for This Products</b>
+                            </p>
+                            @endif
+                            <div class="review-btn">
+                                <a class="review-links" href="#" data-toggle="modal" data-target=".mymodal">Write Your Review!</a>
+                            </div>
+                           
                         </div>
-                        <!-- Quick View | Modal Area End Here -->
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </div>
@@ -469,4 +432,23 @@ $productFilters = ProductFilter::productFilters();
 </section>
 <!-- Li's Laptop Product Area End Here -->
 
+@section('script')
+<script>
+    // ---- ---- Const ---- ---- //
+    const stars = document.querySelectorAll('.rating i');
+    const starsNone = document.querySelector('.rating-box');
+
+    // ---- ---- Stars ---- ---- //
+    stars.forEach((star, index1) => {
+        star.addEventListener('click', () => {
+            stars.forEach((star, index2) => {
+                // ---- ---- Active Star ---- ---- //
+                index1 >= index2 ?
+                    star.classList.add('active') :
+                    star.classList.remove('active');
+            });
+        });
+    });
+</script>
+@endsection
 @endsection

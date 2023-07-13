@@ -4,6 +4,7 @@ use App\Models\Section;
 
 $sections = Section::sections();
 $totalCartItems = totalCartItems();
+$totalWishlistItems = totalWishlistItems();
 // echo "<pre>";print_r($totalCartItems);die;
 ?>
 
@@ -105,25 +106,42 @@ $totalCartItems = totalCartItems();
                 <!-- Begin Header Middle Right Area -->
                 <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
                     <!-- Begin Header Middle Searchbox Area -->
+                    @if(Auth::check())
+                    <form action="{{url('user/search-products')}}" class="hm-searchbox" method="get">
+                        <select class="nice-select select-search-category" name="section_id">
+                            <option selected="selected" value="">All</option>
+                            @foreach($sections as $section)
+                            <option @if(isset($_REQUEST['section_id'])&& !empty($_REQUEST['section_id']))selected="" @endif value="{{$section->id}}" >{{$section->section_name}}</option>
+                            @endforeach
+
+                        </select>
+                        <input type="text" placeholder="Enter your search key ..."  name="search" @if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])) value="{{$_REQUEST['search']}}" @endif>
+                        <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+
+                    @else
                     <form action="{{url('/search-products')}}" class="hm-searchbox" method="get">
                         <select class="nice-select select-search-category" name="section_id">
                             <option selected="selected" value="">All</option>
                             @foreach($sections as $section)
-                            <option value="{{$section->id}}">{{$section->section_name}}</option>
+                            <option @if(isset($_REQUEST['section_id'])&& !empty($_REQUEST['section_id']))selected="" @endif value="{{$section->id}}" >{{$section->section_name}}</option>
                             @endforeach
 
                         </select>
-                        <input type="text" placeholder="Enter your search key ..." name="search">
+                        <input type="text" placeholder="Enter your search key ..."  name="search" @if(isset($_REQUEST['search']) && !empty($_REQUEST['search'])) value="{{$_REQUEST['search']}}" @endif>
                         <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                     </form>
+
+                    @endif
+                    
                     <!-- Header Middle Searchbox Area End Here -->
                     <!-- Begin Header Middle Right Area -->
                     <div class="header-middle-right">
                         <ul class="hm-menu">
                             <!-- Begin Header Middle Wishlist Area -->
                             <li class="hm-wishlist">
-                                <a href="wishlist.html">
-                                    <span class="cart-item-count wishlist-item-count">0</span>
+                                <a href="{{route('user.wishlist')}}">
+                                    <span class="cart-item-count wishlist-item-count totalWishlistItems">{{totalWishlistItems()}}</span>
                                     <i class="fa fa-heart-o"></i>
                                 </a>
                             </li>
@@ -168,15 +186,18 @@ $totalCartItems = totalCartItems();
 
                             <ul>
 
-                                <li class="dropdown-holder"><a href="index.html">Home</a>
+                                
+                                
+                                <!-- <li class="dropdown-holder"><a href="index.html">Home</a>
                                     <ul class="hb-dropdown">
                                         <li><a href="index.html">Home One</a></li>
                                         <li><a href="index-2.html">Home Two</a></li>
                                         <li><a href="index-3.html">Home Three</a></li>
                                         <li class="active"><a href="index-4.html">Home Four</a></li>
                                     </ul>
-                                </li>
-                                <li class="megamenu-holder"><a href="shop-left-sidebar.html">Shop</a>
+                                </li> -->
+
+                                <!-- <li class="megamenu-holder"><a href="shop-left-sidebar.html">Shop</a>
                                     <ul class="megamenu hb-megamenu">
                                         <li><a href="shop-left-sidebar.html">Shop Page Layout</a>
                                             <ul>
@@ -209,18 +230,23 @@ $totalCartItems = totalCartItems();
                                             </ul>
                                         </li>
                                     </ul>
-                                </li>
-                                <li class="dropdown-holder"><a href="blog-left-sidebar.html">Blog</a>
+                                </li> -->
+
+                                @foreach($sections as $section)
+                                 @if(count($section->categories))
+                                <li class="dropdown-holder"><a href="blog-left-sidebar.html">{{$section->section_name}}</a>
                                     <ul class="hb-dropdown">
-                                        <li class="sub-dropdown-holder"><a href="blog-left-sidebar.html">Blog Grid View</a>
+                                    @foreach($section->categories as $category)
+                                        <li class="sub-dropdown-holder"><a href="{{url($category->url)}}">{{$category->category_name}}</a>
                                             <ul class="hb-dropdown hb-sub-dropdown">
-                                                <li><a href="blog-2-column.html">Blog 2 Column</a></li>
-                                                <li><a href="blog-3-column.html">Blog 3 Column</a></li>
-                                                <li><a href="blog-left-sidebar.html">Grid Left Sidebar</a></li>
-                                                <li><a href="blog-right-sidebar.html">Grid Right Sidebar</a></li>
+                                            @foreach($category->subcategories as $subcategory)
+                                                <li><a href="{{url($subcategory->url)}}">{{$subcategory->category_name}}</a></li>
+                                           
+                                                @endforeach
                                             </ul>
                                         </li>
-                                        <li class="sub-dropdown-holder"><a href="blog-list-left-sidebar.html">Blog List View</a>
+                                        @endforeach
+                                        <!-- <li class="sub-dropdown-holder"><a href="blog-list-left-sidebar.html">Blog List View</a>
                                             <ul class="hb-dropdown hb-sub-dropdown">
                                                 <li><a href="blog-list.html">Blog List</a></li>
                                                 <li><a href="blog-list-left-sidebar.html">List Left Sidebar</a></li>
@@ -239,10 +265,12 @@ $totalCartItems = totalCartItems();
                                                 <li><a href="blog-video-format.html">Blog Video Format</a></li>
                                                 <li><a href="blog-gallery-format.html">Blog Gallery Format</a></li>
                                             </ul>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                 </li>
-                                <li class="megamenu-static-holder"><a href="index.html">Fashion</a>
+                                @endif
+                                @endforeach
+                                <!-- <li class="megamenu-static-holder"><a href="index.html">Fashion</a>
 
                                     <ul class="megamenu hb-megamenu">
 
@@ -292,11 +320,13 @@ $totalCartItems = totalCartItems();
                                         </li>
                                     </ul>
 
-                                </li>
-                                <li><a href="about-us.html">Mobiles</a></li>
-                                <li><a href="contact.html">Contact</a></li>
-                                <li><a href="shop-left-sidebar.html">Appliances</a></li>
-                                <li><a href="shop-left-sidebar.html">Accessories</a></li>
+                                </li> -->
+                                
+                                
+
+                                <!-- <li><a href="about-us.html">Mobiles</a></li>
+                                <li><a href="contact.html">Contact</a></li> -->
+                               
                             </ul>
                         </nav>
                     </div>

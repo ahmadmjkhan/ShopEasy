@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Backend\AdminOperations\Categories;
 
 use App\Models\Section;
 use App\Models\Category;
+use App\Models\AdminRole;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -17,9 +19,21 @@ class CategoryController extends Controller
 
             $category = Category::with(['section', 'parentcategory'])->get();
 
+            //Set Admin/Subadmin for Category //
 
+            $categoryModuleCount = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'categories'])->count();
+            if(Auth::guard('admin')->user()->type=='SuperAdmin'){
+                $categoryModule['view_access'] =1;
+                $categoryModule['edit_acccess'] =1;
+                $categoryModule['full_access'] =1;
+            }elseif($categoryModuleCount==0){
+                   $message = "This feature is Restricted For You";
+                   return redirect('admin/dashboard')->with('error_message',$message);
+            }else{
+                $categoryModule = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'categories'])->first()->toArray();
+            }
 
-            return view('backend.admin.catalogue-management.categories.category-index')->with(compact('category'));
+            return view('backend.admin.catalogue-management.categories.category-index')->with(compact(['category','categoryModule']));
        
     }
 

@@ -98,7 +98,7 @@ class AdminAuthenticationController extends Controller
                 // dd($creds);
 
                 if (Auth::guard('admin')->attempt($creds)) {
-                    if (Auth::guard('admin')->user()->status == '0' && Auth::guard('admin')->user()->type == "SubAdmin") {
+                    if (Auth::guard('admin')->user()->status == '0') {
                         return response()->json([
                             'status' => '2',
                             'message' => 'Your Account is not Active',

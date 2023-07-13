@@ -135,12 +135,12 @@
                                 <td>Rs {{$subtotal}}</td>
                             </tr>
                             <tr>
-                                <th>Tax (9.3%)</th>
-                                <td>$10.34</td>
+                                <th>Tax ({{$orderDetails['gst_charges']/$subtotal*100 }}%)</th>
+                                <td>Rs {{$orderDetails['gst_charges']}}</td>
                             </tr>
                             <tr>
                                 <th>Shipping Charges:</th>
-                                <td>Rs 0</td>
+                                <td>Rs {{$orderDetails['shipping_charges']}}</td>
                             </tr>
                             <tr>
                                 <th>Grand Total:</th>

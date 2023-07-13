@@ -1,14 +1,16 @@
 <?php
 
 use App\Models\Product;
+use App\Models\Wishlist;
 ?>
 <!-- shop-products-wrapper start -->
-<div class="shop-products-wrapper">
+<div class="shop-products-wrapper ">
     <div class="tab-content">
         <div id="grid-view" class="tab-pane fade active show" role="tabpanel">
             <div class="product-area shop-product-area">
-                <div class="row">
+                <div class="row page-reload">
                     @foreach($categoryProducts as $product)
+
                     <div class="col-lg-4 col-md-4 col-sm-6 mt-40">
                         <!-- single-product-wrap start -->
                         <div class="single-product-wrap">
@@ -59,9 +61,20 @@ use App\Models\Product;
                                 </div>
                                 <div class="add-actions">
                                     <ul class="add-actions-link">
-                                        <li class="add-cart active"><a href="shopping-cart.html">Add to cart</a></li>
-                                        <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                        <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+
+                                        <li class="add-cart add-to-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+
+                                        <li><a href="#" title="quick view" class="quick-view-btn btnQuickView" data-toggle="modal" data-target="#quickViewModal" data-product-name="{{$product->product_name}}" data-product-category="{{$product->categories->category_name}}" data-product-description="{{$product->short_description}}" data-product-img="{{asset('uploads/catalogue-images/products/large/'.$product->product_image)}}" data-product-price="{{$product->product_price}}"><i class="fa fa-eye"></i></a></li>
+                                        @if(Auth::check())
+                                        <?php $countWishlist = 0; ?>
+                                        <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                        ?>
+                                        <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                        @else
+                                        <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
@@ -134,9 +147,20 @@ use App\Models\Product;
                         <div class="col-lg-4">
                             <div class="shop-add-action mb-xs-30">
                                 <ul class="add-actions-link">
-                                    <li class="add-cart"><a href="#">Add to cart</a></li>
-                                    <li class="wishlist"><a href="wishlist.html"><i class="fa fa-heart-o"></i>Add to wishlist</a></li>
-                                    <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i>Quick view</a></li>
+                                    <li class="add-cart add-to-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+
+                                    @if(Auth::check())
+                                    <?php $countWishlist = 0; ?>
+                                    <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                    ?>
+                                    <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                    @else
+                                    <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                    @endif
+
+                                    <li><a href="#" title="quick view" class="quick-view-btn btnQuickView" data-toggle="modal" data-target="#exampleModalCenter" data-product-name="{{$product->product_name}}" data-product-description="{{$product->short_description}}" data-product-img="{{asset('uploads/catalogue-images/products/large/'.$product->product_image)}}" data-product-price="{{$product->product_price}}"><i class="fa fa-eye"></i></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -149,4 +173,15 @@ use App\Models\Product;
         </div>
     </div>
 </div>
+
+
+
+
+
+
+<script src="{{asset('frontend/assets/js/vendor/jquery-1.12.4.min.js')}}"></script>
+
+
+
+
 <!-- shop-products-wrapper end -->

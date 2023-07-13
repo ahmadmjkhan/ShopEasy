@@ -87,7 +87,7 @@ use App\Models\Product; ?>
                     <h3>Delivery Addresses</h3>
                     @foreach($deliveryAddresses as $address)
 
-                    <div style="float:left;margin-right:10px;"><input type="radio" id="address{{$address['id']}}" name="address_id" value="{{$address['id']}}" shipping_charges="{{$address['shipping_charges']}}" total_price="{{$total_price}}" coupon_amount="{{Session::get('couponAmount')}}" codpincodeCount="{{$address['codpincodeCount']}}" prepaidpincodeCount="{{$address['prepaidpincodeCount']}}"></div>
+                    <div style="float:left;margin-right:10px;"><input type="radio" id="address{{$address['id']}}" name="address_id" value="{{$address['id']}}" shipping_charges="{{$address['shipping_charges']}}" gst_charges="{{$address['gst_charges']}}" total_price="{{$total_price}}" coupon_amount="{{Session::get('couponAmount')}}" codpincodeCount="{{$address['codpincodeCount']}}" prepaidpincodeCount="{{$address['prepaidpincodeCount']}}"></div>
                     <div>
                         <label><b>{{$address['name']}},{{$address['address']}}<br>{{$address['city']}},{{$address['state']}},{{$address['country']}},({{$address['phone']}})</b></label>
                         <a style="float:right" href="javascript:;" data-addressid="{{$address['id']}}" class="editAddress btn btn-sm btn-info text-white ml-2"><i class="fa fa-edit"></i></a>
@@ -149,9 +149,16 @@ use App\Models\Product; ?>
 
                                     </tr>
 
+                                    <tr>
+
+                                        <th>GST Charges</th>
+                                        <td class="gst_charges">Rs {{$totalGST}}</td>
+
+                                    </tr>
+
                                     <tr class="order-total table-primary">
                                         <th>Grand Total</th>
-                                        <td><strong><span class="amount grand_total">₹ {{$total - Session::get('couponAmount')}}</span></strong></td>
+                                        <td><strong><span class="amount grand_total">₹ {{$total + $totalGST - Session::get('couponAmount')}}</span></strong></td>
                                     </tr>
 
                                 </tfoot>
@@ -216,6 +223,11 @@ use App\Models\Product; ?>
                                 <div style="float:left;margin-right:10px;" class="prepaidMethod">
                                     <input type="radio" id="paypal" name="payment_gateway" value="Paypal" style="width: 20px;">
                                     <label for="">Paypal</label>
+                                </div>
+
+                                <div style="float:left;margin-right:10px;" class="prepaidMethod">
+                                    <input type="radio" id="razorpay" name="payment_gateway" value="RazorPay" style="width: 20px;">
+                                    <label for="">RazorPay</label>
                                 </div>
 
 

@@ -1,6 +1,8 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\AdminOperations\RatingController\RatingController;
 use App\Http\Controllers\Backend\AdminOperations\Brands\BrandController;
 use App\Http\Controllers\Backend\AdminOperations\Banners\BannerController;
 use App\Http\Controllers\Backend\AdminOperations\Filters\FilterController;
@@ -8,6 +10,7 @@ use App\Http\Controllers\Backend\AdminOperations\Sections\SectionController;
 use App\Http\Controllers\Backend\AdminOperations\Categories\CategoryController;
 use App\Http\Controllers\Backend\AdminOperations\AdminController\AdminController;
 use App\Http\Controllers\Backend\AdminOperations\AdminOrders\AdminOrderController;
+
 use App\Http\Controllers\Backend\AdminOperations\AdminCoupons\AdminCouponController;
 use App\Http\Controllers\Backend\AdminOperations\AdminProducts\AdminProductController;
 use App\Http\Controllers\Backend\AdminOperations\ShippingCharges\ShippingChargeController;
@@ -47,6 +50,8 @@ Route::group(['middleware' => 'admin.auth', 'prefix' => 'admin', 'as' => 'admin.
     Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
     //-------------------//
 
+    //Admin Role Routes//
+    Route::match(['get','post'],'admin-role/{id}', [AdminController::class,'updateAdminRole'])->name('admin-role');
 
     // Seller Operation //
     Route::get('all-sellers', [AdminController::class, 'allSellers'])->name('all-sellers');
@@ -186,12 +191,21 @@ Route::group(['middleware' => 'admin.auth', 'prefix' => 'admin', 'as' => 'admin.
     Route::post('update-order-status', [AdminOrderController::class, 'updateOrderStatus'])->name('update-order-status');
     Route::post('update-item-order-status', [AdminOrderController::class, 'updateOrderItemStatus'])->name('update-order-item-status');
 
-
+    //Return/Exchange Request //
+    Route::get('return-requests',[AdminOrderController::class,'returnRequests'])->name('return-requests');
+    Route::post('return-requests/update',[AdminOrderController::class,'returnRequestsUpdate'])->name('return-requests-update');
+    Route::get('exchange-requests',[AdminOrderController::class,'exchangeRequests'])->name('exchange-requests');
+    Route::post('exchange-requests/update',[AdminOrderController::class,'exchangeRequestsUpdate'])->name('exchange-requests-update');
 
     //Order Invoice //
     Route::get('order/inovice/{id}', [AdminOrderController::class, 'viewOrderInvoice'])->name('order_invoice');
     Route::get('order/inovice/pdf/{id}', [AdminOrderController::class, 'viewOrderPdfInvoice'])->name('pdf_order_invoice');
 
+
+    //Rating And Reviews//
+    Route::get('rating',[RatingController::class,'rating_index'])->name('rating_index');
+    
+    Route::post('update-rating-status',[RatingController::class,'updateratingstatus']);
     //Shipping Charges operation//
 
     Route::get('shipping-charges-index', [ShippingChargeController::class, 'shippingchargeindex'])->name('shipping-charges');
@@ -201,7 +215,9 @@ Route::group(['middleware' => 'admin.auth', 'prefix' => 'admin', 'as' => 'admin.
 
     // All Admin Relates Details //
     Route::match(['get', 'post'], 'add_edit_all_admin_details/{id?}', [AdminController::class, 'add_edit_All_Admin_Details'])->name('add_edit_all_admin_details');
-    Route::get('{type?}', [AdminController::class, 'admins'])->name('all_admins');
+    // Route::get('{type?}', [AdminController::class, 'admins'])->name('all_admins');
+    Route::get('all-admins', [AdminController::class, 'admins'])->name('all_admins');
     Route::post('update-admins-status', [AdminController::class, 'update_all_admins_status']);
     Route::post('delete-admins/{id}', [AdminController::class, 'delete_admins'])->name('delete_admins');
+    Route::match(['get','post'],'update-role/{id}', [AdminController::class, 'updateAdminRole'])->name('update-role');
 });

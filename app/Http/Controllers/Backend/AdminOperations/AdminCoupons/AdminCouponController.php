@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Brand;
 use App\Models\Coupon;
 use App\Models\Section;
+use App\Models\AdminRole;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -20,7 +21,19 @@ class AdminCouponController extends Controller
         if (Auth::guard('admin')->check()) {
             $allcoupons = Coupon::with('seller_coupon')->get();
             // dd($allcoupons);
-            return view('backend.admin.coupons.coupon-index')->with(compact('allcoupons'));
+
+            $couponModuleCount = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'coupons'])->count();
+        if(Auth::guard('admin')->user()->type=='SuperAdmin'){
+            $couponModule['view_access'] =1;
+            $couponModule['edit_acccess'] =1;
+            $couponModule['full_access'] =1;
+        }elseif($couponModuleCount==0){
+               $message = "This feature is Restricted For You";
+               return redirect('admin/dashboard')->with('error_message',$message);
+        }else{
+            $couponModule = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'coupons'])->first()->toArray();
+        }
+            return view('backend.admin.coupons.coupon-index')->with(compact(['allcoupons','couponModule']));
         } else {
             redirect()->route('admin.login');
         }

@@ -15,11 +15,12 @@ $all_sections = Section::sections();
         <div class="breadcrumb-content">
             <ul>
                 <li><a href="index.html">Home</a></li>
-            <?php echo $categoryDetails['breadcrumb']; ?>
+                <?php echo $categoryDetails['breadcrumb']; ?>
+                
             </ul>
         </div>
 
-        
+
     </div>
 </div>
 <!-- Li's Breadcrumb Area End Here -->
@@ -28,6 +29,7 @@ $all_sections = Section::sections();
     <div class="container">
         <div class="row">
             <div class="col-lg-9 order-1 order-lg-2">
+                @if(!isset($_REQUEST['search']))
                 <!-- Begin Li's Banner Area -->
                 <div class="single-banner shop-page-banner">
                     <a href="#">
@@ -35,8 +37,12 @@ $all_sections = Section::sections();
                     </a>
                 </div>
                 <!-- Li's Banner Area End Here -->
+                
+                @endif
                 <!-- shop-top-bar start -->
+
                 <div class="shop-top-bar mt-30">
+                    <h4><?php  echo $categoryDetails['categoryDetails']['description']; ?></h4>
                     <div class="shop-bar-inner">
                         <div class="product-view-mode">
                             <!-- shop-item-filter-list start -->
@@ -51,6 +57,7 @@ $all_sections = Section::sections();
                         </div>
                     </div>
                     <!-- product-select-box start -->
+                    @if(!isset($_REQUEST['search']))
                     <div class="product-select-box">
                         <div class="product-short">
                             <form name="sortProduct" id="sortProducts">
@@ -59,7 +66,7 @@ $all_sections = Section::sections();
                                 <select name="sort" id="sort" class="nice-select">
                                     <option value="product-latest">Latest Products</option>
 
-                                    <option value="price-lowest">Price (Low &gt; High)</option>
+                                    <option value="price-lowest">Price (Low &lt; High)</option>
                                     <option value="price-highest">Price (High &gt; Low)</option>
                                     <option value="name_a_z">Name (A - Z)</option>
                                     <option value="name_z_a">Name (Z - A)</option>
@@ -67,13 +74,15 @@ $all_sections = Section::sections();
                             </form>
                         </div>
                     </div>
+                    @endif
                     <!-- product-select-box end -->
                 </div>
                 <!-- shop-top-bar end -->
 
 
 
-                <div class="filter-products">
+
+                <div class="filter-products ">
                     @include('frontend.product-pages.ajax-product-listing')
                 </div>
 
@@ -82,7 +91,7 @@ $all_sections = Section::sections();
 
 
 
-
+                @if(!isset($_REQUEST['search']))
                 <div class="paginatoin-area">
                     <div class="row">
                         <div class="col-lg-6 col-md-6 pt-xs-15">
@@ -103,6 +112,7 @@ $all_sections = Section::sections();
                         </div>
                     </div>
                 </div>
+                @endif
             </div>
 
 
@@ -113,5 +123,10 @@ $all_sections = Section::sections();
     </div>
 </div>
 <!-- Content Wraper Area End Here -->
+
+
+
+
+
 
 @endsection

@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Cart;
+use App\Models\Wishlist;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
@@ -27,4 +28,19 @@ function totalCartItems(){
         }])->orderby('id','Desc')->where('session_id',Session::get('session_id'))->get();
     }
     return $getCartItems;
+
+}
+
+function totalWishlistItems(){
+    if(Auth::check()){
+        $user_id = Auth::user()->id;
+        $totalWishlistItems = Wishlist::where('user_id',$user_id)->count();
+        return $totalWishlistItems;
+    }else{
+        return false;
+    }
+
+    
+  
+
 }

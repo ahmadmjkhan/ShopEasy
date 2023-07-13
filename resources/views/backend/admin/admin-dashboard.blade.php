@@ -2,7 +2,21 @@
 
 @section('content')
 <!-- Small boxes (Stat box) -->
+@if(Session::has('success_message'))
+
+<div class="alert alert-success">
+    {{Session::get('success_message')}}
+</div>
+@endif
+@if(Session::has('error_message'))
+
+<div class="alert alert-danger">
+    {{Session::get('error_message')}}
+</div>
+@endif
 <div class="row">
+
+
     <div class="col-lg-3 col-6">
         <!-- small box -->
         <div class="small-box bg-info">

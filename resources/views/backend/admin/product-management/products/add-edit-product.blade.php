@@ -136,6 +136,15 @@ Add-Edit Product
                             </div>
                         </div>
 
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="">Product GST(%)</label>
+
+                                <input type="text" id="form6Example1" name="product_gst" class="form-control" placeholder="Product GST" @if(!empty($products->product_gst)) value="{{$products->product_gst}}" @else value="{{old('product_gst')}}" @endif />
+                                <span class="text-danger error-text product_gst_error"></span>
+                            </div>
+                        </div>
+
 
 
                         <div class="col-md-6">

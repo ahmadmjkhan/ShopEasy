@@ -13,6 +13,8 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\SellerBankDetails;
 use App\Http\Controllers\Controller;
+use App\Models\AdminRole;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -32,6 +34,9 @@ class AdminController extends Controller
   
       return view('backend.admin.admin-dashboard')->with(compact(['all_section', 'all_categories', 'all_products', 'all_brands', 'all_sellers', 'all_users', 'all_orders']));
     }
+
+
+    
   
   
     public function allSellers()
@@ -296,6 +301,47 @@ class AdminController extends Controller
         ]);
       }
     }
+
+    public function updateAdminRole(Request $request,$id=null){
+         
+      if($request->isMethod('post')){
+        $data = $request->all();
+        // echo "<pre>";print_r($data);die;
+
+        unset($data['_token']);
+
+        AdminRole::where('admin_id',$id)->delete();
+
+        foreach($data as $key => $value){
+          if(isset($value['view'])){
+            $view = $value['view'];
+          }else{
+            $view = 0;
+          }
+
+          if(isset($value['edit'])){
+            $edit = $value['edit'];
+          }else{
+            $edit = 0;
+          }
+
+          if(isset($value['full'])){
+            $full = $value['full'];
+          }else{
+            $full = 0;
+          }
+
+          AdminRole::where('admin_id',$id)->insert(['admin_id'=>$id,'module'=>$key,'view_access'=>$view,'edit_access'=>$edit,'full_access'=>$full]);
+        }
+
+        $message = "Roles Updated Successfully";
+        return redirect()->back()->with('success_message',$message);
+      }
+      $adminDetails = Admin::where('id',$id)->first()->toArray();
+      $adminRoles = AdminRole::where('admin_id',$id)->get()->toArray();
+      $title = "Update ".$adminDetails['name']." (".$adminDetails['type'].") Roles/Permission";
+      return view('backend.admin.all-admins.update-role-permission')->with(compact(['adminDetails','title','adminRoles']));
+    }
   
   
     public function add_edit_All_Admin_Details(Request $request, $id = null)
@@ -326,7 +372,7 @@ class AdminController extends Controller
           return response()->json([
             'status' => '1',
             'message' => $message,
-            "redirect_url" => route('admin.dashboard'),
+            "redirect_url" => route('admin.all_admins'),
           ]);
         }
       }
@@ -335,26 +381,34 @@ class AdminController extends Controller
       return view('backend.admin.all-admins.update-all-admin-details', compact('all_admin', 'title'));
     }
   
-    public function admins($type = null)
+    public function admins()
     {
+      
+      // echo $type; die;
+      // $admins = Admin::query();
+    
   
-      $admins = Admin::query();
+      // if (!empty($type)) {
+      //   $admins = $admins->where('type', $type);
+        
+      //   $title = ucfirst($type) . "s";
+        
+      // } else {
+  
+      //   $title = "All Admins/SubAdmins";
+      // }
   
   
-      if (!empty($type)) {
-        $admins = $admins->where('type', $type);
-        $title = ucfirst($type) . "s";
-      } else {
-  
-        $title = "All Admins/SubAdmins";
+      if(Auth::guard('admin')->user()->type=="SubAdmin"){
+        return redirect()->back()->with('error_message','This Feature is restricted for You');
       }
-  
-  
-      $admins = $admins->get();
-  
-  
-      return view('backend.admin.all-admins.all-admin-index')->with(compact(['admins', 'title']));
+      // $admins = $admins->get();
+      // echo "<pre>";print_r($admins);die;
+      $all_admins = Admin::get();
+      return view('backend.admin.all-admins.all-admin-index')->with(compact(['all_admins']));
     }
+
+    
   
     public function update_all_admins_status(Request $request)
     {

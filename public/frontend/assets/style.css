@@ -1743,7 +1743,9 @@ textarea:focus {
 .hb-menu nav > ul > li {
 		display: inline-block;
 		position: relative;
-		padding-right: 40px;
+		/* padding-right: 40px; */
+		padding-right: 30px;
+		margin-left: 30px;
 		transition: all 0.3s ease-in-out;
 }
 .hb-menu nav > ul > li > a {
@@ -3002,6 +3004,7 @@ text-align: center;
 .li-header-4 .hb-menu nav > ul > li > a:after {
 	color: #ffffff;
 	transition: all 0.3s ease-in-out;
+	/* padding-left: 20px; */
 }
 .li-header-4 .hb-menu nav > ul > li:hover > a, 
 .li-header-4 .hb-menu nav > ul > li:hover > a::after {

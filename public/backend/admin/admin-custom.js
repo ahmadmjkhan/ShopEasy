@@ -983,6 +983,63 @@ $(document).ready(function () {
         });
     });
 
+
+    $(document).on("click", ".updateratingstatus", function () {
+        var status = $(this).children("i").attr("status");
+        var rating_id = $(this).attr("rating_id");
+        // alert(status);
+        // alert(brand_id);
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "Want To Change The Status",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Change Status",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers: {
+                        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                            "content"
+                        ),
+                    },
+
+                    type: "post",
+                    url: "/admin/update-rating-status",
+                    data: { status: status, rating_id: rating_id },
+
+                    success: function (resp) {
+                        if (resp["status"] == 0) {
+                            $("#rating-" + rating_id).html(
+                                "<i class='icon-copy fa fa-toggle-off fa-lg'  status='InActive'></i>"
+                            );
+                            Swal.fire(
+                                "Status Changed!",
+                                "Your Status Is Now InActive",
+                                "success"
+                            );
+                        } else if (resp["status"] == 1) {
+                            $("#rating-" + rating_id).html(
+                                "<i class='icon-copy fa fa-toggle-on fa-lg'  status='Active'></i>"
+                            );
+                            Swal.fire(
+                                "Status Changed!",
+                                "Your Status Is Now Active",
+                                "success"
+                            );
+                        }
+                    },
+                    error: function () {
+                        alert("error");
+                    },
+                });
+            }
+        });
+    });
+
     //ANOTHER WAY FOR CHANGE STATUS //
     // $(document).ready(function () {
     //     $(".toggle-class").change(function () {

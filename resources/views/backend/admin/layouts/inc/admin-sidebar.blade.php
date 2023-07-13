@@ -75,9 +75,37 @@
           </ul>
         </li>
 
+        
 
 
         <li class="nav-header">EXAMPLES</li>
+
+        @if(Auth::guard('admin')->user()->type=='SuperAdmin')
+        <li class="nav-item">
+          <a href="#" class="nav-link">
+            <i class="nav-icon far fa-plus-square"></i>
+            <p>
+              Admins
+              <i class="fas fa-angle-left right"></i>
+            </p>
+          </a>
+
+
+          <ul class="nav nav-treeview">
+
+          <li class="nav-item">
+              <a href="{{route('admin.all_admins')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Admins</p>
+              </a>
+            </li>
+
+            
+
+
+          </ul>
+        </li>
+        @endif
 
         <li class="nav-item">
           <a href="{{route('admin.all-sellers')}}" class="nav-link">
@@ -203,44 +231,35 @@
                 <p>Orders</p>
               </a>
             </li>
+            <li class="nav-item">
+              <a href="{{route('admin.return-requests')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Return Requests</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{{route('admin.exchange-requests')}}" class="nav-link">
+                <i class="far fa-circle nav-icon"></i>
+                <p>Exchange Requests</p>
+              </a>
+            </li>
 
 
           </ul>
         </li>
 
-        @if(Auth::guard('admin')->user()->type=='Admin')
+      
+
+
         <li class="nav-item">
-          <a href="#" class="nav-link">
-            <i class="nav-icon far fa-plus-square"></i>
+          <a href="{{route('admin.rating_index')}}" class="nav-link">
+            <i class="nav-icon fas fa-th"></i>
             <p>
-              Admins
-              <i class="fas fa-angle-left right"></i>
+              Reviews And Ratings
+              <!-- <span class="right badge badge-danger">New</span> -->
             </p>
           </a>
-
-
-          <ul class="nav nav-treeview">
-
-            <li class="nav-item">
-              <a href="{{url('backend/admin')}}" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>Admin</p>
-              </a>
-            </li>
-
-            <li class="nav-item">
-              <a href="{{url('admin/subadmin')}}" class="nav-link">
-                <i class="far fa-circle nav-icon"></i>
-                <p>SubAdmins</p>
-              </a>
-            </li>
-
-
-          </ul>
         </li>
-        @endif
-
-
 
 
 

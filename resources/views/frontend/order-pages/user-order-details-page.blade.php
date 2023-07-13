@@ -1,6 +1,10 @@
 <?php
 
-use App\Models\Product; ?>
+use App\Models\Order;
+use App\Models\Product;
+
+$getOrderStatus = Order::getOrderStatus($orderDetails['id']);
+?>
 @extends('frontend.layouts.frontend-master-layout')
 
 @section('content')
@@ -24,6 +28,36 @@ use App\Models\Product; ?>
 
         <div class="row">
             <div class="col-md-12">
+                @if($getOrderStatus=="New")
+
+
+
+                <button type="button" class="btn btn-primary btn-sm float-right mb-3" data-toggle="modal" data-target="#ordercancelmodal">
+                    Cancel Order
+                </button>
+
+
+
+                @endif
+
+                @if($getOrderStatus=="Delivered")
+
+                <button type="button" class="btn btn-primary btn-sm float-right mb-3" data-toggle="modal" data-target="#orderreturnmodal">
+                    Return/Exchange Order
+                </button>
+                @endif
+                @if(Session::has('success_message'))
+
+                <div class="alert alert-success">
+                    {{Session::get('success_message')}}
+                </div>
+                @endif
+                @if(Session::has('error_message'))
+
+                <div class="alert alert-danger">z
+                    {{Session::get('error_message')}}
+                </div>
+                @endif
                 <table class="table table-stripped">
                     <tr>
                         <td colspan="2" class="table-primary"><strong>Order Details</strong></td>
@@ -42,8 +76,13 @@ use App\Models\Product; ?>
                         <td>Rs.{{$orderDetails['grand_total']}}</td>
                     </tr>
                     <tr>
-                        <td>Shipping_charges</td>
+                        <td>Shipping charges</td>
                         <td>Rs.{{$orderDetails['shipping_charges']}}</td>
+                    </tr>
+
+                    <tr>
+                        <td>Gst charges</td>
+                        <td>Rs.{{$orderDetails['gst_charges']}}</td>
                     </tr>
                     @if($orderDetails['coupon_code']!="")
                     <tr>
@@ -83,6 +122,7 @@ use App\Models\Product; ?>
                         <th>Product Size</th>
                         <th>Product Color</th>
                         <th>Product Quantity</th>
+                        <th>Item Status</th>
                     </tr>
                     @foreach($orderDetails['order_products'] as $product)
 
@@ -93,6 +133,7 @@ use App\Models\Product; ?>
                         <td>{{$product['product_size']}}</td>
                         <td>{{$product['product_color']}}</td>
                         <td>{{$product['product_quantity']}}</td>
+                        <td>{{$product['item_status']}}</td>
                     </tr>
                     @if($product['courier_name']!="")
                     <tr>
@@ -115,7 +156,7 @@ use App\Models\Product; ?>
 
                     <tr>
                         <td>Address</td>
-                        <td>{{$orderDetails['address']}}}</td>
+                        <td>{{$orderDetails['address']}}</td>
                     </tr>
                     <tr>
                         <td>City</td>
@@ -145,6 +186,117 @@ use App\Models\Product; ?>
 
 
 
+    </div>
+</div>
+
+<!-- Button to Open the Modal -->
+
+
+<!-- The Cancel Order Modal -->
+<div class="modal" id="ordercancelmodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form action="{{route('user.orderCancel',$orderDetails['id'])}}" method="post">
+                @csrf
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Reason For Cancellation</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <select name="reason" id="cancelReason" class="form-control">
+                        <option value="">Select Reason</option>
+                        <option value="Order Created By Mistake">Order Created By Mistake</option>
+                        <option value="Order Not Arrive On Time">Order Not Arrive On Time</option>
+                        <option value="Shipping Cost Too High">Shipping Cost Too High</option>
+                        <option value="Found Chesper SomeWhere Else">Found Chesper SomeWhere Else</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info btn-sm btnCancelOrder">Cancel Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- The Return Order Modal -->
+<div class="modal" id="orderreturnmodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <form action="{{route('user.orderReturn',$orderDetails['id'])}}" method="post">
+                @csrf
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Reason For Return/Exchange</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+
+                
+
+                <div class="modal-body">
+                    <select name="return_exchange" id="returnExchange" class="form-control">
+                        <option value="">Select Return/Exchange</option>
+                        <option value="Return">Return</option>
+                        <option value="Exchange">Exchange</option>
+                    </select>
+                </div>
+
+                <div class="modal-body">
+                    <select name="product_info" id="returnProduct" class="form-control">
+                        <option value="">Select Product</option>
+                        @foreach($orderDetails['order_products'] as $product)
+                        @if($product['item_status']!="Return Initiated")
+                        <option value="{{$product['product_code']}}-{{$product['product_size']}}">{{$product['product_code']}}-{{$product['product_size']}}</option>
+                        @endif
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="modal-body productSizes">
+                    <select name="required_size" id="productSize" class="form-control">
+                        <option value="">Select Required Size</option>
+                        
+                    </select>
+                </div>
+
+
+                <div class="modal-body">
+                    <select name="return_reason" id="returnReason" class="form-control">
+                        <option value="">Select Reason</option>
+                        <option value="Performance or Quality not adequate">Performance or Quality not adequate</option>
+                        <option value="Product got Damaged">Product got Damaged</option>
+                        <option value="Item Arrive Too Late">Item Arrive Too Late</option>
+                        <option value="Wrong Item Was Sent">Wrong Item Was Sent</option>
+                        <option value="Item Defective or doesn't work">Item Defective or doesn't work</option>
+                        <option value="Require Smaller Size">Require Smaller Size</option>
+                        <option value="Require Larger Size">Require Larger Size</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+
+
+
+                <div class="modal-body">
+                    <textarea name="comment" id="" cols="10" rows="3" placeholder="Comment" class="form-control"></textarea>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-info btn-sm btnReturnOrder">Return Order</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

@@ -12,6 +12,9 @@ use App\Models\ProductAttribute;
 use App\Models\DeliveryAddresses;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\ExchangeRequest;
+use App\Models\OrderLog;
+use App\Models\ReturnRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
@@ -20,7 +23,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CartController extends Controller
 {
-     // public function add_to_cart_product(Request $request){
+    // public function add_to_cart_product(Request $request){
     //     $product_id = $request->input('prod_id');
     //     $product_qty = $request->input('prod_qty');
 
@@ -131,9 +134,11 @@ class CartController extends Controller
             Session::forget('couponCode');
             $getCartItems = Cart::getCartItems();
             // dd($cartitems);
+            $meta_title = "Shopping Cart of ShopEasy Website ";
+            $meta_keyword = "Shopping Cart,e-commerce website cart-page";
+            $meta_description = "View Shopping cart of E-commerce website";
 
-
-            return view('frontend.cart-pages.shopping-cart-page')->with(compact('getCartItems'));
+            return view('frontend.cart-pages.shopping-cart-page')->with(compact('getCartItems', 'meta_title', 'meta_description','meta_keyword'));
         } else {
             return redirect();
         }
@@ -327,12 +332,21 @@ class CartController extends Controller
 
         $total_price = 0;
         $total_weight = 0;
-
+        $totalGST = 0;
         foreach ($getCartItems as $item) {
             $getDiscountAttributePrice = Product::getAttributeDiscountPrice($item->product_id, $item->size);
             $total_price = $total_price + ($getDiscountAttributePrice['final_price'] * $item->quantity);
             $product_weight = $item->product->product_weight;
             $total_weight += $product_weight;
+
+            $product_total_price = $getDiscountAttributePrice['final_price'] * $item->quantity;
+
+            //Calculate GST for Product //
+            $getGSTPercent = Product::select('product_gst')->where('id', $item['product_id'])->first();
+
+            $gstPercent = $getGSTPercent->product_gst;
+            $gstAmount = round($product_total_price * $gstPercent / 100, 2);
+            $totalGST = $totalGST + $gstAmount;
         }
 
 
@@ -342,9 +356,9 @@ class CartController extends Controller
             $shipping_charges = ShippingCharge::getShippingCharges($total_weight, $value['country']);
             // dd($shipping_charges);
             $deliveryAddresses[$key]['shipping_charges'] = $shipping_charges;
-
-            $deliveryAddresses[$key]['codpincodeCount'] = DB::table('cod_pincodes')->where('pincode',$value['pincode'])->count();
-            $deliveryAddresses[$key]['prepaidpincodeCount'] = DB::table('prepaid_pincodes')->where('pincode',$value['pincode'])->count();
+            $deliveryAddresses[$key]['gst_charges'] = $totalGST;
+            $deliveryAddresses[$key]['codpincodeCount'] = DB::table('cod_pincodes')->where('pincode', $value['pincode'])->count();
+            $deliveryAddresses[$key]['prepaidpincodeCount'] = DB::table('prepaid_pincodes')->where('pincode', $value['pincode'])->count();
         }
         // dd($deliveryAddresses);
 
@@ -424,7 +438,7 @@ class CartController extends Controller
             // dd($shipping_charges);
 
             //Calculate Grand Total //
-            $grand_total = $total_price + $shipping_charges - Session::get('couponAmount');
+            $grand_total = $total_price + $shipping_charges + $totalGST - Session::get('couponAmount');
             // dd($grand_total);
 
             // Insert Grand Total in Session Variable //
@@ -442,6 +456,7 @@ class CartController extends Controller
             $order->phone = $deliveryAddress['phone'];
             $order->email = Auth::user()->email;
             $order->shipping_charges = $shipping_charges;
+            $order->gst_charges = $totalGST;
             $order->coupon_code = Session::get('couponCode');
             $order->coupon_amount = Session::get('couponAmount');
             $order->order_status = $order_status;
@@ -509,11 +524,20 @@ class CartController extends Controller
                 return redirect()->route('user.paypal');
             }
 
+            if ($data['payment_gateway'] == 'RazorPay') {
+                //Paypal-Redirect User to Paypal page after saving order
+                return redirect()->route('user.razorpay');
+            }
+
             return redirect('user/thanks');
         }
 
+        $meta_title = "Checkout page of ShopEasy Website ";
+        $meta_keyword = "Checkout page,e-commerce website cart-page";
+        $meta_description = "View Checkout page of E-commerce website";
 
-        return view('frontend.cart-pages.checkout-page')->with(compact(['deliveryAddresses', 'getCartItems', 'total_price']));
+
+        return view('frontend.cart-pages.checkout-page')->with(compact(['deliveryAddresses', 'getCartItems', 'total_price', 'totalGST','meta_keyword','meta_description','meta_title']));
     }
 
     // get delivery address //
@@ -608,17 +632,141 @@ class CartController extends Controller
         }
     }
 
-    public function orders($id = null){
-        if(empty($id)){
-            $orders = Order::with('order_products')->where('user_id',Auth::user()->id)->orderBy('id','Desc')->get()->toArray();
+    public function orders($id = null)
+    {
+        if (empty($id)) {
+            $orders = Order::with('order_products')->where('user_id', Auth::user()->id)->orderBy('id', 'Desc')->get()->toArray();
             // dd($orders);
-    
+
             return view('frontend.order-pages.my-order-page')->with(compact('orders'));
-        }else{
-              $orderDetails = Order::with('order_products')->where('id',$id)->first()->toArray();
+        } else {
+            $orderDetails = Order::with('order_products')->where('id', $id)->first()->toArray();
             //   dd($orderDetails);
             return view('frontend.order-pages.user-order-details-page')->with(compact('orderDetails'));
         }
-        
+    }
+
+    public function orderCancel(Request $request, $id)
+    {
+
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+
+            if (isset($data['reason']) && empty($data['reason'])) {
+                return redirect()->back();
+            }
+            $user_id_auth = Auth::user()->id;
+
+            $user_id_order = Order::select('user_id')->where('id', $id)->first();
+
+            if ($user_id_auth == $user_id_order->user_id) {
+                Order::where('id', $id)->update(['order_status' => 'Cancelled']);
+
+                $log = new OrderLog();
+                $log->order_id = $id;
+                $log->order_status  = "Cancelled";
+                $log->reason = $data['reason'];
+                $log->updated_by = "User";
+                $log->save();
+
+                $message = "Order Has Been Cancelled";
+                return redirect()->back()->with('success_message', $message);
+            } else {
+                $message = "Your Order Cancellation Request is not Valid";
+                return redirect()->back()->with('error_message', $message);
+            }
+        }
+    }
+
+
+    public function orderReturn(Request $request, $id)
+    {
+        if ($request->isMethod('post')) {
+            $data = $request->all();
+
+            $user_id_auth = Auth::user()->id;
+
+            $user_id_order = Order::select('user_id')->where('id', $id)->first();
+            // echo "<pre>";print_r($data);die;
+
+            if ($user_id_auth == $user_id_order->user_id) {
+
+                if ($data['return_exchange'] == "Return") {
+                    //Get Product Details//
+                    $productArr = explode("-", $data['product_info']);
+                    $product_code = $productArr[0];
+                    $product_size = $productArr[1];
+
+                    Product_Ordered::where(['order_id' => $id, 'product_code' => $product_code, 'product_size' => $product_size])->update(['item_status' => 'Return Initiated']);
+
+                    $return = new ReturnRequest();
+                    $return->order_id = $id;
+                    $return->user_id = $user_id_auth;
+                    $return->product_size = $product_size;
+                    $return->product_code = $product_code;
+                    $return->return_reason = $data['return_reason'];
+                    $return->return_status = "Pending";
+                    $return->comment = $data['comment'];
+                    $return->save();
+                    $message = "Return Request has been initiated for the ordered Products";
+                    return redirect()->back()->with('success_message', $message);
+                } else if ($data['return_exchange'] == "Exchange") {
+
+
+                    //Get Product Details//
+                    $productArr = explode("-", $data['product_info']);
+                    $product_code = $productArr[0];
+                    $product_size = $productArr[1];
+
+                    Product_Ordered::where(['order_id' => $id, 'product_code' => $product_code, 'product_size' => $product_size])->update(['item_status' => 'Exchange Initiated']);
+
+                    $exchange = new ExchangeRequest();
+                    $exchange->order_id = $id;
+                    $exchange->user_id = $user_id_auth;
+                    $exchange->product_size = $product_size;
+                    $exchange->required_size = $data['required_size'];
+                    $exchange->product_code = $product_code;
+                    $exchange->exchange_reason = $data['return_reason'];
+                    $exchange->exchange_status = "Pending";
+                    $exchange->comment = $data['comment'];
+                    $exchange->save();
+                    $message = "Exchange Request has been initiated for the ordered Products";
+                    return redirect()->back()->with('success_message', $message);
+                } else {
+                    $message = "Your Order/Return Request is not Valid";
+                    return redirect()->back()->with('error_message', $message);
+                }
+            } else {
+                $message = "Your Order/Return Request is not Valid";
+                return redirect()->back()->with('error_message', $message);
+            }
+        }
+    }
+
+    public function getProductSizes(Request $request)
+    {
+        $data = $request->all();
+
+        // echo "<pre>";print_r($data);die;
+        //Get Product Details//
+        $productArr = explode("-", $data['product_info']);
+        // echo "<pre>";print_r($productArr);die;
+        $product_code = $productArr[0];
+        $product_size = $productArr[1];
+
+        $productId = Product::select('id')->where('product_code', $product_code)->first();
+
+        $product_id = $productId->id;
+
+
+        $productSizes = ProductAttribute::select('size')->where('product_id', $product_id)->where('size', '!=', $product_size)->where('stock', '>', 0)->get()->toArray();
+
+        // dd($productSizes);
+        $appendSizes = '<option value="">Select Required Size</option>';
+
+        foreach ($productSizes as $size) {
+            $appendSizes .= '<option value="' . $size['size'] . '">' . $size['size'] . '</option>';
+        }
+        return $appendSizes;
     }
 }

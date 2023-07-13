@@ -1,4 +1,4 @@
-@extends('layouts.admin-app')
+@extends('backend.admin.layouts.admin-master-layout')
 
 @section('title')
 All Admins
@@ -13,9 +13,9 @@ All Admins
 
         <div class="card shadow-lg p-3 mb-5 bg-light rounded ">
             <div class="card-header bg-info">
-                <h5 class="text-center"><b>{{$title}}</b>
-                    @if(Auth::guard('admin')->user()->type == 'Admin')
-                    <a href="{{route('admin.add_edit_all_admin_details')}}" class="float-right btn btn-primary">ADD SUBADMIN</a>
+                <h5 class="text-center"><b></b>
+                    @if(Auth::guard('admin')->user()->type == 'SuperAdmin')
+                    <a href="{{route('admin.add_edit_all_admin_details')}}" class="float-right btn btn-primary">ADD ADMIN/SUBADMIN</a>
                     @endif
                 </h5>
 
@@ -40,7 +40,7 @@ All Admins
                     <tbody>
 
 
-                        @foreach($admins as $admin)
+                        @foreach($all_admins as $admin)
                         <tr>
                             <td>{{$admin->id}}</td>
 
@@ -51,7 +51,7 @@ All Admins
 
 
                             <td>
-
+                                @if($admin->type!= "SuperAdmin")
                                 <!--- Status Active/Inactive --->
                                 @if($admin->status == '1')
                                 <a href="javascript:void(0)" class="updateadminstatus" id="admin-{{$admin->id}}" admin_id="{{$admin->id}}">
@@ -63,20 +63,20 @@ All Admins
                                 </a>
                                 @endif
                                 <!--- Status in Active closed --->
-
+                                @endif
                             </td>
 
 
 
 
                             <td>
-
+                                @if($admin->type!= "SuperAdmin")
                                 <a href="{{url('admin/add_edit_all_admin_details',$admin->id)}}" title="Edit Admin" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-edit"></i></a>
 
-                                @if($admin->type == 'SubAdmin')
+                                @if($admin->type == 'SubAdmin' || $admin->type == 'Admin')
 
                                 <a href="{{url('admin/add-edit-banners',$admin->id)}}" title="View Admin" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-eye" aria-hidden="true"></i></a>
-
+                                <a href="{{route('admin.update-role',$admin->id)}}" title="Set Roles/Permissions" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-lock" aria-hidden="true"></i></a>
                                 @endif
 
 
@@ -84,7 +84,7 @@ All Admins
                                 <form action="{{route('admin.delete_admins',$admin->id)}}" class="delete_form_operation " style="display:inline;" method="post">@csrf
                                     <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
-
+                                @endif
                             </td>
 
 

@@ -71,7 +71,7 @@ Coupons
 
 
                             <td>
-
+                                @if($couponModule['edit_access']==1 || $couponModule['full_access']==1)
                                 <!--- Status Active/Inactive --->
                                 @if($coupon->status == '1')
                                 <a href="javascript:void(0)" class="updatecouponstatus" id="coupon-{{$coupon->id}}" coupon_id="{{$coupon->id}}">
@@ -82,17 +82,19 @@ Coupons
                                     </a>
                                     @endif
                                     <!--- Status in Active closed --->
-
+                                    @endif
                             </td>
 
                             <td>
-
+                            @if($couponModule['edit_access']==1 || $couponModule['full_access']==1)
                                 <a href="{{url('admin/add-edit-coupons',$coupon->id)}}" title="Edit Coupon" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-edit"></i></a>
+                              @endif
 
+                              @if($couponModule['full_access']==1)
                                 <form action="{{route('admin.delete_coupons',$coupon->id)}}" class="delete_form_operation " style="display:inline;" method="post">@csrf
                                     <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
-
+                                 @endif
                             </td>
 
                         </tr>

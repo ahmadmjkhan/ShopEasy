@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('courier_name')->nullable();
             $table->string('tracking_number')->nullable();
             $table->float('shipping_charges')->nullable();
+            $table->float('gst_charges')->nullable();
             $table->string('coupon_code')->nullable();
             $table->float('coupon_amount')->nullable();
             $table->string('order_status')->nullable();

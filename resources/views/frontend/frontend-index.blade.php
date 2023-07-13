@@ -2,6 +2,7 @@
 
 
 use App\Models\Product;
+use App\Models\Wishlist;
 ?>
 @extends('frontend.layouts.frontend-master-layout')
 
@@ -214,11 +215,11 @@ use App\Models\Product;
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
-                                    
+
                                     <a href="{{route('product_details',$product->id)}}">
                                         <img src="{{asset('uploads/catalogue-images/products/small/'.$product->product_image)}}" alt="Li's Product Image">
                                     </a>
-                                   
+
 
 
                                     <span class="sticker">New</span>
@@ -240,9 +241,9 @@ use App\Models\Product;
                                             </div>
                                         </div>
                                         <h4>
-                                            
+
                                             <a class="product_name" href="{{route('product_details',$product->id)}}">{{$product->product_name}}</a>
-                                          
+
 
 
                                         </h4>
@@ -269,8 +270,18 @@ use App\Models\Product;
                                     </div>
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
+                                            <li class="add-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+
+                                            @if(Auth::check())
+                                            <?php $countWishlist = 0; ?>
+                                            <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                            ?>
+                                            <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                            @else
+                                            <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                            @endif
                                             <!-- <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li> -->
                                             <li><a class="quick-view" data-url="{{route('product_show',$product->id)}}" href="javascript:void(0)"><i class="fa fa-eye"></i></a></li>
                                         </ul>
@@ -292,11 +303,11 @@ use App\Models\Product;
                             <div class="single-product-wrap">
                                 <div class="product-image">
 
-                                   
+
                                     <a href="{{route('product_details',$product->id)}}">
                                         <img src="{{asset('uploads/catalogue-images/products/small/'.$seller->product_image)}}" alt="Li's Product Image">
                                     </a>
-                                   
+
 
 
 
@@ -320,9 +331,9 @@ use App\Models\Product;
                                             </div>
                                         </div>
                                         <h4>
-                                            
+
                                             <a class="product_name" href="{{route('product_details',$product->id)}}">{{$seller->product_name}}</a>
-                                            
+
 
                                         </h4>
                                         <?php
@@ -346,8 +357,17 @@ use App\Models\Product;
                                     </div>
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
+                                            <li class="add-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+                                            @if(Auth::check())
+                                            <?php $countWishlist = 0; ?>
+                                            <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                            ?>
+                                            <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                            @else
+                                            <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                            @endif
                                             <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -367,11 +387,11 @@ use App\Models\Product;
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
-                                    
+
                                     <a href="{{route('product_details',$product->id)}}">
                                         <img src="{{asset('uploads/catalogue-images/products/small/'.$feature->product_image)}}" alt="Li's Product Image">
                                     </a>
-                                  
+
 
                                     <span class="sticker">New</span>
                                 </div>
@@ -392,9 +412,9 @@ use App\Models\Product;
                                             </div>
                                         </div>
                                         <h4>
-                                         
+
                                             <a class="product_name" href="{{route('product_details',$product->id)}}">{{$feature->product_name}}</a>
-                                            
+
 
                                         </h4>
                                         <?php
@@ -418,8 +438,17 @@ use App\Models\Product;
                                     </div>
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
+                                            <li class="add-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+                                            @if(Auth::check())
+                                            <?php $countWishlist = 0; ?>
+                                            <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                            ?>
+                                            <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                            @else
+                                            <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                            @endif
                                             <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -441,12 +470,12 @@ use App\Models\Product;
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
-                                    
+
 
                                     <a href="{{route('product_details',$product->id)}}">
                                         <img src="{{asset('uploads/catalogue-images/products/small/'.$product->product_image)}}" alt="Li's Product Image">
                                     </a>
-                                  
+
 
                                     <span class="sticker">New</span>
                                 </div>
@@ -467,9 +496,9 @@ use App\Models\Product;
                                             </div>
                                         </div>
                                         <h4>
-                                          
+
                                             <a class="product_name" href="{{route('product_details',$product->id)}}">{{$product->product_name}}</a>
-                                            
+
 
                                         </h4>
                                         <?php
@@ -493,8 +522,17 @@ use App\Models\Product;
                                     </div>
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
+                                            <li class="add-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+                                            @if(Auth::check())
+                                            <?php $countWishlist = 0; ?>
+                                            <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                            ?>
+                                            <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                            @else
+                                            <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                            @endif
                                             <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
                                         </ul>
                                     </div>
@@ -557,12 +595,14 @@ use App\Models\Product;
                 </div>
                 <div class="row">
                     <div class="product-active owl-carousel">
+                        @foreach($allproducts as $product)
+                        @if($product->categories->category_name == 'Laptops' || $product->categories->category_name == 'Gaming Laptops')
                         <div class="col-lg-12">
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
                                     <a href="single-product.html">
-                                        <img src="{{asset('frontend/assets/images/product/large-size/1.jpg')}}" alt="Li's Product Image">
+                                        <img src="{{asset('uploads/catalogue-images/products/large/'.$product->product_image)}}" alt="Li's Product Image">
                                     </a>
                                     <span class="sticker">New</span>
                                 </div>
@@ -570,7 +610,7 @@ use App\Models\Product;
                                     <div class="product_desc_info">
                                         <div class="product-review">
                                             <h5 class="manufacturer">
-                                                <a href="product-details.html">Graphic Corner</a>
+                                                <a href="product-details.html">{{$product->categories->category_name}}</a>
                                             </h5>
                                             <div class="rating-box">
                                                 <ul class="rating">
@@ -582,15 +622,40 @@ use App\Models\Product;
                                                 </ul>
                                             </div>
                                         </div>
-                                        <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
+                                        <h4><a class="product_name" href="single-product.html">{{$product->product_name}}</a></h4>
+
+                                        <?php
+                                        $getDiscountPrice = Product::getDiscountPrice($product->id);
+
+                                        ?>
+
+                                        @if($getDiscountPrice>0)
                                         <div class="price-box">
-                                            <span class="new-price">$46.80</span>
+                                            <span class="new-price new-price-2">Rs: {{$getDiscountPrice}}</span>
+                                            <span class="old-price">{{$product->product_price}}</span>
+                                            <span class="discount-percentage">-7%</span>
                                         </div>
+                                        @else
+                                        <div class="price-box">
+
+                                            <span class="old-price">Rs: {{$product->product_price}}</span>
+
+                                        </div>
+                                        @endif
                                     </div>
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
+                                            <li class="add-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+                                            @if(Auth::check())
+                                            <?php $countWishlist = 0; ?>
+                                            <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                            ?>
+                                            <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                            @else
+                                            <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                            @endif
                                             <!-- <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li> -->
                                             <li><a class="quick-view" data-url="#" href="javascript:void(0)"><i class="fa fa-eye"></i></a></li>
                                         </ul>
@@ -599,217 +664,10 @@ use App\Models\Product;
                             </div>
                             <!-- single-product-wrap end -->
                         </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="single-product.html">
-                                        <img src="{{asset('frontend/assets/images/product/large-size/2.jpg')}}" alt="Li's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price new-price-2">$71.80</span>
-                                            <span class="old-price">$77.22</span>
-                                            <span class="discount-percentage">-7%</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
-                                            <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-wrap end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="single-product.html">
-                                        <img src="{{asset('frontend/assets/images/product/large-size/3.jpg')}}" alt="Li's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Graphic Corner</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price">$46.80</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
-                                            <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-wrap end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="single-product.html">
-                                        <img src="{{asset('frontend/assets/images/product/large-size/4.jpg')}}" alt="Li's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price new-price-2">$71.80</span>
-                                            <span class="old-price">$77.22</span>
-                                            <span class="discount-percentage">-7%</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
-                                            <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-wrap end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="single-product.html">
-                                        <img src="{{asset('frontend/assets/images/product/large-size/5.jpg')}}" alt="Li's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Graphic Corner</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price">$46.80</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
-                                            <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-wrap end -->
-                        </div>
-                        <div class="col-lg-12">
-                            <!-- single-product-wrap start -->
-                            <div class="single-product-wrap">
-                                <div class="product-image">
-                                    <a href="single-product.html">
-                                        <img src="{{asset('frontend/assets/images/product/large-size/6.jpg')}}" alt="Li's Product Image">
-                                    </a>
-                                    <span class="sticker">New</span>
-                                </div>
-                                <div class="product_desc">
-                                    <div class="product_desc_info">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                            <div class="rating-box">
-                                                <ul class="rating">
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                    <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <h4><a class="product_name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="price-box">
-                                            <span class="new-price new-price-2">$71.80</span>
-                                            <span class="old-price">$77.22</span>
-                                            <span class="discount-percentage">-7%</span>
-                                        </div>
-                                    </div>
-                                    <div class="add-actions">
-                                        <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
-                                            <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- single-product-wrap end -->
-                        </div>
+                        @endif
+                        @endforeach
+
+
                     </div>
                 </div>
             </div>
@@ -842,12 +700,12 @@ use App\Models\Product;
                             <!-- single-product-wrap start -->
                             <div class="single-product-wrap">
                                 <div class="product-image">
-                                    
+
 
                                     <a href="{{route('product_details',$product->id)}}">
                                         <img src="{{asset('uploads/catalogue-images/products/small/'.$product->product_image)}}" alt="Li's Product Image">
                                     </a>
-                                 
+
                                     <span class="sticker">New</span>
                                 </div>
                                 <div class="product_desc">
@@ -867,9 +725,9 @@ use App\Models\Product;
                                             </div>
                                         </div>
                                         <h4>
-                                          
+
                                             <a class="product_name" href="{{route('product_details',$product->id)}}">{{$product->product_name}}</a>
-                                           
+
 
                                         </h4>
                                         <?php
@@ -893,8 +751,17 @@ use App\Models\Product;
                                     </div>
                                     <div class="add-actions">
                                         <ul class="add-actions-link">
-                                            <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                            <li><a class="links-details" href="single-product.html"><i class="fa fa-heart-o"></i></a></li>
+                                            <li class="add-cart active"><a href="{{route('product_details',$product->id)}}">Add to cart</a></li>
+                                            @if(Auth::check())
+                                            <?php $countWishlist = 0; ?>
+                                            <?php $countWishlist = Wishlist::countWishlist($product->id);
+
+                                            ?>
+                                            <li><a class="links-details updateWishlist" data-productid="{{$product->id}}">@if($countWishlist>0)<i class="fa fa-heart"></i>@else<i class="fa fa-heart-o"></i>@endif</a></li>
+                                            @else
+                                            <li><a class="links-details"><i class="fa fa-heart-o"></i></a></li>
+
+                                            @endif
                                             <!-- <li><a class="quick-view" data-toggle="modal" data-target="#exampleModalCenter" href="#"><i class="fa fa-eye"></i></a></li> -->
                                             <li><a class="quick-view" data-url="{{route('product_show',$product->id)}}" href="javascript:void(0)"><i class="fa fa-eye"></i></a></li>
 
@@ -951,26 +818,29 @@ use App\Models\Product;
     <div class="container">
         <div class="row">
             <!-- Begin Featured Product Area -->
+
             <div class="col-lg-4">
                 <div class="featured-product">
                     <div class="li-section-title">
                         <h2>
-                            <span>Chamcham</span>
+                            <span>Mobiles</span>
                         </h2>
                     </div>
                     <div class="featured-product-active-2 owl-carousel">
                         <div class="featured-product-bundle">
+                            @foreach($allproducts as $product)
+                            @if($product->section->section_name=="Mobiles")
                             <div class="row">
                                 <div class="group-featured-pro-wrapper">
                                     <div class="product-img">
                                         <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/1.jpg')}}">
+                                            <img alt="" src="{{asset('uploads/catalogue-images/products/small/'.$product->product_image)}}">
                                         </a>
                                     </div>
                                     <div class="featured-pro-content">
                                         <div class="product-review">
                                             <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
+                                                <a href="{{url($product->categories->url)}}">{{$product->categories->category_name}}</a>
                                             </h5>
                                         </div>
                                         <div class="rating-box">
@@ -982,97 +852,60 @@ use App\Models\Product;
                                                 <li class="no-star"><i class="fa fa-star-o"></i></li>
                                             </ul>
                                         </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
+                                        <h4><a class="featured-product-name" href="{{route('product_details',$product->id)}}">{{$product->product_name}}</a></h4>
+                                        <?php
+                                        $getDiscountPrice = Product::getDiscountPrice($product->id);
+
+                                        ?>
+
+                                        @if($getDiscountPrice>0)
+                                        <div class="price-box">
+                                            <span class="new-price new-price-2">Rs: {{$getDiscountPrice}}</span>
+                                            <span class="old-price">{{$product->product_price}}</span>
+                                            <span class="discount-percentage">-7%</span>
                                         </div>
+                                        @else
+                                        <div class="price-box">
+
+                                            <span class="old-price">Rs: {{$product->product_price}}</span>
+
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="group-featured-pro-wrapper">
-                                    <div class="product-img">
-                                        <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/2.jpg')}}">
-                                        </a>
-                                    </div>
-                                    <div class="featured-pro-content">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                        </div>
-                                        <div class="rating-box">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            </ul>
-                                        </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="group-featured-pro-wrapper">
-                                    <div class="product-img">
-                                        <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/3.jpg')}}">
-                                        </a>
-                                    </div>
-                                    <div class="featured-pro-content">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                        </div>
-                                        <div class="rating-box">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            </ul>
-                                        </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endif
+
+                           
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Featured Product Area End Here -->
-            <!-- Begin Featured Product Area -->
+
+
             <div class="col-lg-4">
-                <div class="featured-product pt-sm-10 pt-xs-25">
+                <div class="featured-product">
                     <div class="li-section-title">
                         <h2>
-                            <span>Meito</span>
+                            <span>Laptops</span>
                         </h2>
                     </div>
                     <div class="featured-product-active-2 owl-carousel">
                         <div class="featured-product-bundle">
+                            @foreach($allproducts as $product)
+                            @if($product->categories->category_name=="Laptops")
                             <div class="row">
                                 <div class="group-featured-pro-wrapper">
                                     <div class="product-img">
                                         <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/4.jpg')}}">
+                                            <img alt="" src="{{asset('uploads/catalogue-images/products/small/'.$product->product_image)}}">
                                         </a>
                                     </div>
                                     <div class="featured-pro-content">
                                         <div class="product-review">
                                             <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
+                                                <a href="{{url($product->categories->url)}}">{{$product->categories->category_name}}</a>
                                             </h5>
                                         </div>
                                         <div class="rating-box">
@@ -1084,97 +917,60 @@ use App\Models\Product;
                                                 <li class="no-star"><i class="fa fa-star-o"></i></li>
                                             </ul>
                                         </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
+                                        <h4><a class="featured-product-name" href="{{route('product_details',$product->id)}}">{{$product->product_name}}</a></h4>
+                                        <?php
+                                        $getDiscountPrice = Product::getDiscountPrice($product->id);
+
+                                        ?>
+
+                                        @if($getDiscountPrice>0)
+                                        <div class="price-box">
+                                            <span class="new-price new-price-2">Rs: {{$getDiscountPrice}}</span>
+                                            <span class="old-price">{{$product->product_price}}</span>
+                                            <span class="discount-percentage">-7%</span>
                                         </div>
+                                        @else
+                                        <div class="price-box">
+
+                                            <span class="old-price">Rs: {{$product->product_price}}</span>
+
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="group-featured-pro-wrapper">
-                                    <div class="product-img">
-                                        <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/5.jpg')}}">
-                                        </a>
-                                    </div>
-                                    <div class="featured-pro-content">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                        </div>
-                                        <div class="rating-box">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            </ul>
-                                        </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="group-featured-pro-wrapper">
-                                    <div class="product-img">
-                                        <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/6.jpg')}}">
-                                        </a>
-                                    </div>
-                                    <div class="featured-pro-content">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                        </div>
-                                        <div class="rating-box">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            </ul>
-                                        </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endif
+
+                           
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Featured Product Area End Here -->
-            <!-- Begin Featured Product Area -->
+
+
             <div class="col-lg-4">
-                <div class="featured-product pt-sm-10 pt-xs-25">
+                <div class="featured-product">
                     <div class="li-section-title">
                         <h2>
-                            <span>Sanai</span>
+                            <span>Appliances</span>
                         </h2>
                     </div>
                     <div class="featured-product-active-2 owl-carousel">
                         <div class="featured-product-bundle">
+                            @foreach($allproducts as $product)
+                            @if($product->section->section_name=="Appliances")
                             <div class="row">
                                 <div class="group-featured-pro-wrapper">
                                     <div class="product-img">
                                         <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/6.jpg')}}">
+                                            <img alt="" src="{{asset('uploads/catalogue-images/products/small/'.$product->product_image)}}">
                                         </a>
                                     </div>
                                     <div class="featured-pro-content">
                                         <div class="product-review">
                                             <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
+                                                <a href="{{url($product->categories->url)}}">{{$product->categories->category_name}}</a>
                                             </h5>
                                         </div>
                                         <div class="rating-box">
@@ -1186,76 +982,38 @@ use App\Models\Product;
                                                 <li class="no-star"><i class="fa fa-star-o"></i></li>
                                             </ul>
                                         </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
+                                        <h4><a class="featured-product-name" href="{{route('product_details',$product->id)}}">{{$product->product_name}}</a></h4>
+                                        <?php
+                                        $getDiscountPrice = Product::getDiscountPrice($product->id);
+
+                                        ?>
+
+                                        @if($getDiscountPrice>0)
+                                        <div class="price-box">
+                                            <span class="new-price new-price-2">Rs: {{$getDiscountPrice}}</span>
+                                            <span class="old-price">{{$product->product_price}}</span>
+                                            <span class="discount-percentage">-7%</span>
                                         </div>
+                                        @else
+                                        <div class="price-box">
+
+                                            <span class="old-price">Rs: {{$product->product_price}}</span>
+
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="group-featured-pro-wrapper">
-                                    <div class="product-img">
-                                        <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/4.jpg')}}">
-                                        </a>
-                                    </div>
-                                    <div class="featured-pro-content">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                        </div>
-                                        <div class="rating-box">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            </ul>
-                                        </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="group-featured-pro-wrapper">
-                                    <div class="product-img">
-                                        <a href="product-details.html">
-                                            <img alt="" src="{{asset('frontend/assets/images/featured-product/2.jpg')}}">
-                                        </a>
-                                    </div>
-                                    <div class="featured-pro-content">
-                                        <div class="product-review">
-                                            <h5 class="manufacturer">
-                                                <a href="product-details.html">Studio Design</a>
-                                            </h5>
-                                        </div>
-                                        <div class="rating-box">
-                                            <ul class="rating">
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                            </ul>
-                                        </div>
-                                        <h4><a class="featured-product-name" href="single-product.html">Mug Today is a good day</a></h4>
-                                        <div class="featured-price-box">
-                                            <span class="new-price">$71.80</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @endif
+
+                           
+                            @endforeach
                         </div>
                     </div>
                 </div>
             </div>
-            <!-- Featured Product Area End Here -->
+
+        
         </div>
     </div>
 </div>

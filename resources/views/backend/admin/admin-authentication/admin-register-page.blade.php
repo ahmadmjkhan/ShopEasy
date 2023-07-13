@@ -55,8 +55,9 @@
 
                         <select name="type" id="" class="form-control">
                             <option value="">Select Type</option>
-                            <option value="">Admin</option>
-                            <option value="">SubAdmin</option>
+                            <option value="SuperAdmin">SuperAdmin</option>
+                            <option value="Admin">Admin</option>
+                            <option value="SubAdmin">SubAdmin</option>
                         </select>
                        
                     </div>

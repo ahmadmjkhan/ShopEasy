@@ -65,14 +65,14 @@ Brands
                                 {{$product->added_by}}
 
                                 @else
-                                
+
                                 {{$product->added_by}}(seller)
                                 @endif
 
                             </td>
                             <!--- Status Active/Inactive --->
                             <td>
-
+                                @if($productModule['edit_access']==1 || $productModule['full_access']==1)
                                 @if($product->status == '1')
                                 <a href="javascript:void(0)" class="updateproductstatus" id="products-{{$product->id}}" product_id="{{$product->id}}">
                                     <i class="icon-copy fa fa-toggle-on fa-lg" aria-hidden="true" status="Active"></i>
@@ -82,22 +82,25 @@ Brands
                                     <i class="icon-copy fa fa-toggle-off fa-lg" aria-hidden="true" status="Active"></i>
                                 </a>
                                 @endif
-
+                                @endif
                             </td>
 
                             <!--- Status in Active closed --->
 
                             <td>
+                                @if($productModule['edit_access']==1 || $productModule['full_access']==1)
                                 <a href="{{route('admin.product_store',$product->id)}}" title="Edit Category" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-edit"></i></a>
 
                                 <a href="{{route('admin.add_edit_attributes',$product->id)}}" title="Add Attributes" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-folder-plus"></i></a>
 
                                 <a href="{{route('admin.add_multiple_images',$product->id)}}" title="Add Multiple Images" class="float-center mx-1 btn-sm btn btn-primary"><i class="fas fa-images"></i></a>
-
+                                @endif
+                                @if($productModule['full_access']==1)
 
                                 <form action="{{route('admin.delete_product',$product->id)}}" class="delete_form_operation " style="display:inline;" method="post">@csrf
                                     <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                                 </form>
+                                @endif
                             </td>
 
 

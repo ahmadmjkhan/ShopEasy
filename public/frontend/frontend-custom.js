@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $(".productSizes").hide();
     $(document).on("submit", ".user_register_form_operation", function (e) {
         e.preventDefault();
 
@@ -42,8 +43,6 @@ $(document).ready(function () {
                     $(".success_message").html(response.message);
                     $(".register-button").css("background", "cyan");
                     $(".register-button").text("Registered");
-
-                   
                 }
             },
         });
@@ -302,22 +301,8 @@ $(document).ready(function () {
 
     // loadcart();
 
-    // function loadcart() {
-
-    //     $.ajax({
-    //         method: "GET",
-    //         url: "load-cart-data",
-
-    //         success: function(response) {
-    //             console.log(response.count);
-    //             $('.cart-count').html('');
-    //             $('.cart-count').html(response.count);
-    //         }
-    //     });
-    // }
-
     $(document).on("submit", ".form_operation", function (e) {
-        // alert('hello');
+        alert("hello");
         e.preventDefault();
 
         var url = $(this).attr("action");
@@ -352,7 +337,7 @@ $(document).ready(function () {
         });
     });
 
-    // used for change in size to get attribute price //
+    // used for change in size to get attribute price in product details page //
     $("#getPrice").on("change", function () {
         // alert("hello");
         var size = $(this).val();
@@ -449,6 +434,9 @@ $(document).ready(function () {
     //     });
     // });
 
+
+     // -----------CARTS OPERATIONS----------------- //
+
     $(document).on("click", ".increament_btn", function (e) {
         e.preventDefault();
 
@@ -480,36 +468,6 @@ $(document).ready(function () {
             $(this).closest(".product-data").find(".qty_input").val(value);
         }
     });
-
-    // var quantitiy = 0;
-    // $('.quantity-right-plus').click(function(e) {
-
-    //     // Stop acting like a button
-    //     e.preventDefault();
-    //     // Get the field name
-    //     var quantity = parseInt($('#quantity').val());
-
-    //     // If is not undefined
-
-    //     $('#quantity').val(quantity + 1);
-
-    //     // Increment
-
-    // });
-
-    // $('.quantity-left-minus').click(function(e) {
-    //     // Stop acting like a button
-    //     e.preventDefault();
-    //     // Get the field name
-    //     var quantity = parseInt($('#quantity').val());
-
-    //     // If is not undefined
-
-    //     // Increment
-    //     if (quantity > 0) {
-    //         $('#quantity').val(quantity - 1);
-    //     }
-    // });
 
     $(document).on("click", ".changeQuantity", function () {
         if ($(this).hasClass("decreament_btn")) {
@@ -551,146 +509,6 @@ $(document).ready(function () {
             },
         });
     });
-
-    // $(document).on('click', '.updateCartItem', function(e) {
-
-    //     alert('hello');
-    //     if ($(this).hasClass('quantity-left-minus')) {
-
-    //         var quantity = parseInt($('#quantity').val());
-
-    //         // If is not undefined
-
-    //         // Increment
-    //         if (quantity > 0) {
-    //             var new_qty = $('#quantity').val(quantity - 1);
-    //             alert(new_qty);
-    //         }
-
-    //         alert(new_qty);
-    //     }
-
-    //     if ($(this).hasClass('quantity-right-plus')) {
-    //         var quantity = parseInt($('#quantity').val());
-
-    //         // If is not undefined
-
-    //         var new_qty = $('#quantity').val(quantity + 1);
-
-    //         alert(new_qty);
-    //     }
-
-    //     // var prod_id = $(this).closest('.product-data').find('.prod_id').val();
-    //     // var qty = $(this).closest('.product-data').find('.qty_input').val();
-
-    //     var cart_id = $(this).data('cartid');
-
-    //     // var qty = $(this).data('qty');
-
-    //     alert(cart_id);
-    //     // alert(qty);
-    //     data = {
-    //             'cart_id': cart_id,
-    //             'prod_qty': new_qty
-    //         },
-
-    //         // alert(prod_id);
-    //         // alert(qty);
-
-    //         $.ajax({
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             },
-    //             method: 'post',
-    //             url: "cart-update",
-    //             data: data,
-    //             success: function(response) {
-    //                 alert(response);
-
-    //                 if (response.status == '1') {
-    //                     $('.appendcartitems').html(response.view);
-    //                     // $('.cartitem-reload').load(location.href + " .cartitem-reload");
-    //                 }
-    //                 // window.location.reload();
-
-    //             }
-    //         });
-
-    // })
-
-    // $(document).on('click', '.changeQuantity', function(e) {
-    //     // alert('hello');
-    //     e.preventDefault();
-
-    //     var prod_id = $(this).closest('.product-data').find('.prod_id').val();
-    //     var qty = $(this).closest('.product-data').find('.qty_input').val();
-
-    //     // alert(prod_id);
-    //     // alert(qty);
-    //     data = {
-    //             'prod_id': prod_id,
-    //             'prod_qty': qty
-    //         },
-
-    //         // alert(prod_id);
-    //         // alert(qty);
-
-    //         $.ajaxSetup({
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             }
-    //         });
-
-    //     $.ajax({
-
-    //         method: "post",
-    //         url: "cart-update",
-    //         data: data,
-    //         success: function(response) {
-    //             // window.location.reload();
-    //             $('.cartitem-reload').load(location.href + " .cartitem-reload");
-
-    //         }
-    //     });
-
-    // });
-
-    // $(document).on('click', '.changeQuantity', function(e) {
-    //     alert('hello');
-    //     e.preventDefault();
-
-    //     var cart_id = $(this).data('cartId');
-    //     var qty = $(this).data('qty');
-
-    //     alert(cart_id);
-    //     alert(qty);
-    //     data = {
-    //             'prod_id': prod_id,
-    //             'prod_qty': qty
-    //         },
-
-    //         // alert(prod_id);
-    //         // alert(qty);
-
-    //         $.ajaxSetup({
-    //             headers: {
-    //                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    //             }
-    //         });
-
-    //     $.ajax({
-
-    //         method: "post",
-    //         url: "cart-update",
-    //         data: data,
-    //         success: function(response) {
-    //             // window.location.reload();
-    //             $('.cartitem-reload').load(location.href + " .cartitem-reload");
-
-    //         }
-    //     });
-
-    // });
 
     $(document).on("click", ".delete-cart-item", function (e) {
         e.preventDefault();
@@ -798,7 +616,17 @@ $(document).ready(function () {
         });
     });
 
-    // Edit Deliver Address //
+
+
+     // -----------CARTS OPERATIONS END----------------- //
+
+
+
+
+    // -----------CHECKOUT OPERATIONS----------------- //
+
+
+    // Edit Delivery Address //
     $(document).on("click", ".editAddress", function () {
         var addressid = $(this).data("addressid");
         $.ajax({
@@ -831,7 +659,7 @@ $(document).ready(function () {
     // update delivery Address form //
     $(document).on("submit", "#addressAddEditForm", function (e) {
         e.preventDefault();
-        alert("helo");
+
         var formdata = $("#addressAddEditForm").serialize();
         $.ajax({
             headers: {
@@ -884,24 +712,24 @@ $(document).ready(function () {
 
     $("input[name=address_id]").bind("change", function () {
         var shipping_charges = $(this).attr("shipping_charges");
-
+        var gst_charges = $(this).attr("gst_charges");
         var total_price = $(this).attr("total_price");
         var coupon_amount = $(this).attr("coupon_amount");
 
         $(".shipping_charges").html("₹" + shipping_charges);
+        $(".gst_charges").html("₹" + gst_charges);
         var codpincodeCount = $(this).attr("codpincodeCount");
         var prepaidpincodeCount = $(this).attr("prepaidpincodeCount");
-        alert(codpincodeCount);
 
-        if(codpincodeCount > 0) {
+        if (codpincodeCount > 0) {
             $(".codMethod").show();
-        }else{
+        } else {
             $(".codMethod").hide();
         }
-        
-        if(prepaidpincodeCount > 0) {
+
+        if (prepaidpincodeCount > 0) {
             $(".prepaidMethod").show();
-        }else{
+        } else {
             $(".prepaidMethod").hide();
         }
         if (coupon_amount == "") {
@@ -910,19 +738,17 @@ $(document).ready(function () {
         $(".couponAmount").html("₹" + coupon_amount);
         var grand_total =
             parseInt(total_price) +
+            parseInt(gst_charges) +
             parseInt(shipping_charges) -
             parseInt(coupon_amount);
         //    alert(grand_total);
         $(".grand_total").html("₹" + grand_total);
-
-
     });
 
-
-    $("#checkpincode").click(function(){
+    $("#checkpincode").click(function () {
         var pincode = $("#pincode").val();
-        
-        if(pincode==""){
+
+        if (pincode == "") {
             alert("Enter Pincode: ");
             return false;
         }
@@ -931,47 +757,66 @@ $(document).ready(function () {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             type: "post",
-            data:{pincode:pincode},
-            url:"/user/check-pincode",
-            success: function(resp){
+            data: { pincode: pincode },
+            url: "/user/check-pincode",
+            success: function (resp) {
                 // alert(resp.message);
-                if(resp.status==1){
+                if (resp.status == 1) {
                     $(".success_message").show();
                     $(".success_message").html(resp.message);
                     setTimeout(function () {
                         $(".success_message").fadeOut("slow");
                     }, 3000);
-                    
-                }else{
+                } else {
                     $(".error_message").show();
                     $(".error_message").html(resp.message);
                     setTimeout(function () {
                         $(".error_message").fadeOut("slow");
                     }, 3000);
                 }
-            },error: function(){
+            },
+            error: function () {
                 alert("Error");
-            }
-        })
-    })
+            },
+        });
+    });
 
-    $("#sort").on("change", function () {
-        alert("hello");
-        var sort = $("#sort").val();
-        var url = $("#url").val();
 
+    // -----------CHECKOUT OPERATIONS END----------------- //
+
+
+
+    // -----------WISHLIST OPERATIONS----------------- //
+
+
+
+    $(".updateWishlist").on("click", function () {
+        var product_id = $(this).data("productid");
+        //   alert(product_id);
         $.ajax({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
             method: "post",
 
-            data: {
-                url: url,
-                sort: sort,
-            },
+            url: "/user/update-wishlist",
+            data: { product_id: product_id },
             success: function (data) {
-                $(".filter-products").html(data);
+                if (data.action == "Added") {
+                    $("a[data-productid=" + product_id + "]").html(
+                        '<i class="fa fa-heart"></i>'
+                    );
+                    alert("Item added to Wishlist successfully");
+                    
+                    $(".totalWishlistItems").html(data.totalWishlistItems);
+                } else if (data.action == "Remove") {
+                    $("a[data-productid=" + product_id + "]").html(
+                        '<i class="fa fa-heart-o"></i>'
+                    );
+                    alert("Item Reomve From Wishlist");
+                   
+                    $(".totalWishlistItems").html(data.totalWishlistItems);
+                }
             },
             error: function () {
                 alert("error");
@@ -979,11 +824,183 @@ $(document).ready(function () {
         });
     });
 
-    function get_filter(class_name) {
-        var filter = [];
-        $("." + class_name + ":checked").each(function () {
-            filter.push($(this).val());
+    $(document).on("click", ".wishlistItemDelete", function () {
+        var wishlistid = $(this).data("wishlistid");
+
+        alert("are you sure you want to delete");
+        $.ajax({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            method: "post",
+
+            url: "delete-wishlist-item",
+            data: { wishlistid: wishlistid },
+            success: function (data) {
+                $(".totalWishlistItems").html(data.totalWishlistItems);
+                $(".appendWishlistItems").html(data.view);
+            },
+            error: function () {
+                alert("error");
+            },
         });
-        return filter;
-    }
+    });
+
+     // -----------WISHLIST OPERATIONS END----------------- //
+
+
+     // -----------ORDER RELATED OPERATIONS----------------- //
+    $(document).on("click", ".btnCancelOrder", function () {
+        var reason = $("#cancelReason").val();
+        if (reason == "") {
+            alert("Please Select a Reason");
+            return false;
+        }
+
+        var result = confirm("Are you sure you want to Cancel this Product");
+
+        if (!result) {
+            return false;
+        }
+    });
+
+    $("#returnExchange").change(function () {
+        var return_exchange = $(this).val();
+        if (return_exchange == "Exchange") {
+            $(".productSizes").show();
+        } else {
+            $(".productSizes").hide();
+        }
+    });
+
+    $("#returnProduct").change(function () {
+        var product_info = $(this).val();
+        var return_exchange = $("#returnExchange").val();
+
+        if (return_exchange == "Exchange") {
+            $.ajax({
+                headers: {
+                    "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+                        "content"
+                    ),
+                },
+                type: "post",
+                url: "/user/get-product-sizes",
+                data: { product_info: product_info },
+                success: function (data) {
+                    //    alert(data);
+                    $("#productSize").html(data);
+                },
+                error: function () {
+                    alert("Error");
+                },
+            });
+        }
+    });
+
+    $(document).on("click", ".btnReturnOrder", function () {
+        var return_exchange = $("#returnExchange").val();
+        var returnproduct = $("#returnProduct").val();
+        var reason = $("#returnReason").val();
+
+        if (return_exchange == "") {
+            alert("Please select if You want to Exchange or Return");
+            return false;
+        }
+
+        if (returnproduct == "") {
+            alert("Please select a product which you want to return");
+            return false;
+        }
+        if (reason == "") {
+            alert("Please Select a Reason");
+            return false;
+        }
+
+        var result = confirm("Are you sure you want to Return this Product");
+
+        if (!result) {
+            return false;
+        }
+    });
+
+     // -----------ORDER RELATED OPERATIONS END----------------- //
+
+
+
+    //RazorPay Payment Integration//
+    $(document).on("click", ".razorpay_form", function (e) {
+        e.preventDefault();
+
+        var data = new FormData($(".razorpay_form")[0]);
+        var url = $(this).attr("action");
+        $.ajax({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+            method: "POST",
+            url: url,
+            data: data,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+
+            success: function (responsea) {
+                if (responsea.status == "1") {
+                    var options = {
+                        key: "rzp_test_tjC4YIr3QSZeME", // Enter the Key ID generated from the Dashboard
+                        amount: responsea.amount * 100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        currency: responsea.currency,
+                        name: "Shopeasy E-commerce", //your business name
+                        description: "Test Transaction",
+                        image: "https://example.com/your_logo",
+                        // "order_id": "order_9A33XWu170gUtm", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        handler: function (response) {
+                            $.ajax({
+                                headers: {
+                                    "X-CSRF-TOKEN": $(
+                                        'meta[name="csrf-token"]'
+                                    ).attr("content"),
+                                },
+                                method: "post",
+                                url: "/user/payment/success",
+                                data: {
+                                    order_id: responsea.order_id,
+                                    user_id: responsea.user_id,
+                                    payment_id: response.razorpay_payment_id,
+                                    payer_email: responsea.email,
+                                    amount: responsea.amount,
+                                    currency: responsea.currency,
+                                    payment_status: "Paid",
+                                },
+                                success: function (responseb) {
+                                    Swal.fire(responseb.message);
+                                    window.location = responseb.redirect_url;
+                                },
+                            });
+                        },
+                        prefill: {
+                            //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+                            name: responsea.name, //your customer's name
+                            email: responsea.email,
+                            contact: responsea.contact, //Provide the customer's phone number for better conversion rates
+                        },
+                        notes: {
+                            address: "Razorpay Corporate Office",
+                        },
+                        theme: {
+                            color: "#3399cc",
+                        },
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                }
+            },
+        });
+    });
+
+
+
+  
+    
 });

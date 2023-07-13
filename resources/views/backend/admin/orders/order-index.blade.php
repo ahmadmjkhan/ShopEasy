@@ -61,10 +61,11 @@ Orders
                             <td>{{$order['payment_method']}}</td>
 
                             <td>
+                                @if($orderModule['edit_access']==1 || $orderModule['full_access']==1)
                                 <a href="{{route('admin.order-details',$order['id'])}}" title="View Order Details"><i class="icon-copy fas fa-eye" aria-hidden="true"></i></a>
                                 <a href="{{route('admin.order_invoice',$order['id'])}}" title="order Invoice"><i class="icon-copy fas fa-print" aria-hidden="true"></i></a>
                                 <a href="{{route('admin.pdf_order_invoice',$order['id'])}}" title="Generate PDF Invoice"><i class="icon-copy fas fa-file" aria-hidden="true"></i></a>
-                                
+                                @endif
                             </td>
                             @endforeach
 

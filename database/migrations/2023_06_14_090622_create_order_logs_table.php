@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             $table->integer('order_id')->nullable();
             $table->integer('order_item_id')->nullable();
+            $table->string('reason')->nullable();
+            $table->string('updated_by')->nullable();
             $table->string('order_status')->nullable();
             $table->timestamps();
         });

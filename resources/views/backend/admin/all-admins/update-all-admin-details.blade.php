@@ -1,4 +1,4 @@
-@extends('layouts.admin-app')
+@extends('backend.admin.layouts.admin-master-layout')
 
 @section('title')
 Add-Edit Admins
@@ -14,11 +14,7 @@ Add-Edit Admins
             <div class="card-header">
                 <h5 class="text-center"><b>{{$title}}</b>
 
-                    @if($all_admin->type == 'Admin')
-                    <a href="{{url('admin/admin')}}" class="btn btn-sm btn-success float-right">BACK</a>
-                    @else
-                    <a href="{{url('admin/subadmin')}}" class="btn btn-sm btn-success float-right">BACK</a>
-                    @endif
+                <a href="{{route('admin.all_admins')}}" class="btn btn-sm btn-success float-right">BACK</a>
                 </h5>
             </div>
             <!-- /.card-header -->
@@ -55,6 +51,7 @@ Add-Edit Admins
                         <label for="">Admin Type</label>
                         <select name="type" id="" class="form-control">
                             <option value="">Select Type</option>
+                            
                             <option value="Admin" {{$all_admin->type == 'Admin' ? 'selected' : ''}}>Admin</option>
                             <option value="SubAdmin" {{$all_admin->type == 'SubAdmin' ? 'selected' : ''}}>SubAdmin</option>
 

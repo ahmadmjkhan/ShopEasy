@@ -7,7 +7,12 @@ use App\Models\Product;
 use App\Models\OrderLog;
 use Illuminate\Support\Facades\Auth;
 
+
+
 $getSellerComission = Seller::getSellerComissions(Auth::guard('seller')->user()->id);
+
+
+
 
 ?>
 @extends('backend.admin.layouts.admin-master-layout')
@@ -24,6 +29,13 @@ $getSellerComission = Seller::getSellerComissions(Auth::guard('seller')->user()-
 
                 <div class="alert alert-success">
                     {{Session::get('success_message')}}
+                </div>
+                @endif
+
+                @if(Session::has('error_message'))
+
+                <div class="alert alert-success">
+                    {{Session::get('error_message')}}
                 </div>
                 @endif
                 <div class="card">
@@ -43,6 +55,9 @@ $getSellerComission = Seller::getSellerComissions(Auth::guard('seller')->user()-
 
                         <label for=""><strong>Shipping Charges:</strong></label>
                         <span> ₹ {{$orderDetails['shipping_charges']}}</span><br>
+
+                        <label for=""><strong>GST Charges:</strong></label>
+                        <span> ₹ {{$orderDetails['gst_charges']}}</span><br>
 
                         @if(!empty($orderDetails['coupon_code']))
                         <label for=""><strong>Coupon Code:</strong></label>
@@ -171,6 +186,11 @@ $getSellerComission = Seller::getSellerComissions(Auth::guard('seller')->user()-
                         @endif
                         @endif
 
+                        @if(!empty($log['reason']))
+                        <br>
+                        {{$log['reason']}}
+                        @endif
+                        <br>
                         {{date('Y-m-d h:i:s',strtotime($log['created_at']))}}<br>
                         @endforeach
 
@@ -210,7 +230,7 @@ $getSellerComission = Seller::getSellerComissions(Auth::guard('seller')->user()-
                                 <td>{{$product['product_color']}}</td>
                                 <td>Rs {{$product['product_price']}}</td>
                                 <td>{{$product['product_quantity']}}</td>
-                               
+
 
 
                                 <td>
