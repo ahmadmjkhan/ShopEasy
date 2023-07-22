@@ -24,7 +24,7 @@ class CategoryController extends Controller
             $categoryModuleCount = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'categories'])->count();
             if(Auth::guard('admin')->user()->type=='SuperAdmin'){
                 $categoryModule['view_access'] =1;
-                $categoryModule['edit_acccess'] =1;
+                $categoryModule['edit_access'] =1;
                 $categoryModule['full_access'] =1;
             }elseif($categoryModuleCount==0){
                    $message = "This feature is Restricted For You";
