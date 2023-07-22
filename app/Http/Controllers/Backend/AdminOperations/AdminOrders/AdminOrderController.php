@@ -28,7 +28,7 @@ class AdminOrderController extends Controller
         $orderModuleCount = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'orders'])->count();
         if(Auth::guard('admin')->user()->type=='SuperAdmin'){
             $orderModule['view_access'] =1;
-            $orderModule['edit_acccess'] =1;
+            $orderModule['edit_access'] =1;
             $orderModule['full_access'] =1;
         }elseif($orderModuleCount==0){
                $message = "This feature is Restricted For You";

@@ -33,7 +33,7 @@ class AdminProductController extends Controller
         $productModuleCount = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'products'])->count();
         if(Auth::guard('admin')->user()->type=='SuperAdmin'){
             $productModule['view_access'] =1;
-            $productModule['edit_acccess'] =1;
+            $productModule['edit_access'] =1;
             $productModule['full_access'] =1;
         }elseif($productModuleCount==0){
                $message = "This feature is Restricted For You";

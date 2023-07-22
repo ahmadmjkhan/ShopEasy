@@ -25,7 +25,7 @@ class AdminCouponController extends Controller
             $couponModuleCount = AdminRole::where(['admin_id'=>Auth::guard('admin')->user()->id,'module'=>'coupons'])->count();
         if(Auth::guard('admin')->user()->type=='SuperAdmin'){
             $couponModule['view_access'] =1;
-            $couponModule['edit_acccess'] =1;
+            $couponModule['edit_access'] =1;
             $couponModule['full_access'] =1;
         }elseif($couponModuleCount==0){
                $message = "This feature is Restricted For You";
