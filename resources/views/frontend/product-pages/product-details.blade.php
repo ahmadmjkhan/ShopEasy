@@ -432,8 +432,95 @@ $productFilters = ProductFilter::productFilters();
 </section>
 <!-- Li's Laptop Product Area End Here -->
 
+
+<!-- Review Modal Area -->
+@if(Auth::check())
+<div class="modal fade modal-wrapper mymodal">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <h3 class="review-page-title">Write Your Review</h3>
+                <div class="modal-inner-area row">
+                    <div class="col-lg-6">
+                        <div class="li-review-product">
+                            <img src="images/product/large-size/3.jpg" alt="Li's Product">
+                            <div class="li-review-product-desc">
+                                <p class="li-product-name">Today is a good day Framed poster</p>
+                                <p>
+                                    <span>Beach Camera Exclusive Bundle - Includes Two Samsung Radiant 360 R3 Wi-Fi Bluetooth Speakers. Fill The Entire Room With Exquisite Sound via Ring Radiator Technology. Stream And Control R3 Speakers Wirelessly With Your Smartphone. Sophisticated, Modern Design </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="li-review-content">
+                            <!-- Begin Feedback Area -->
+                            <div class="feedback-area">
+                                <div class="feedback">
+                                    <h3 class="feedback-title">Our Feedback</h3>
+                                    <form action="{{route('user.add-rating')}}" method="post">@csrf
+                                        <input type="hidden" name="product_id" value="{{$productdetails->id}}">
+                                        <p class="your-opinion">
+                                            <label>Your Rating</label>
+                                            <span>
+                                                <select class="star-rating" name="rating">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                    <option value="4">4</option>
+                                                    <option value="5">5</option>
+                                                </select>
+                                            </span>
+                                        </p>
+                                        <p class="feedback-form">
+                                            <label for="feedback">Your Review</label>
+                                            <textarea id="feedback" name="reviews" cols="45" rows="8" aria-required="true"></textarea>
+                                        </p>
+                                        <div class="feedback-input">
+                                            <!-- <p class="feedback-form-author">
+                                                                            <label for="author">Name<span class="required">*</span>
+                                                                            </label>
+                                                                            <input id="author" name="author" value="" size="30" aria-required="true" type="text">
+                                                                        </p>
+                                                                        <p class="feedback-form-author feedback-form-email">
+                                                                            <label for="email">Email<span class="required">*</span>
+                                                                            </label>
+                                                                            <input id="email" name="email" value="" size="30" aria-required="true" type="text">
+                                                                            <span class="required"><sub>*</sub> Required fields</span>
+                                                                        </p> -->
+
+
+
+                                            <button type="submit" class="btn btn-sm btn-info w-25 float-right" data-dismiss="modal" aria-label="Close">Close</button>
+                                            <button type="submit" class="btn btn-sm btn-info w-25 float-left">Submit</button>
+
+
+
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- Feedback Area End Here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
+<!-- Review Modal Area End Here -->
+
+
 @section('script')
 <script>
+
+    $('.review-btn').on('click', function(){
+        @if(!Auth::check()){
+            alert("Please Login To add review");
+        }
+        @endif
+    });
     // ---- ---- Const ---- ---- //
     const stars = document.querySelectorAll('.rating i');
     const starsNone = document.querySelector('.rating-box');
