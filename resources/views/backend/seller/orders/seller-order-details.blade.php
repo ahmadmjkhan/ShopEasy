@@ -193,9 +193,15 @@ $getSellerComission = Seller::getSellerComissions(Auth::guard('seller')->user()-
                                     @endif
                                 </td>
 
-
-                                <td>{{$comission = round($total_price * $getSellerComission/100,2)}}</td>
-                                <td>{{$total_price - $comission }}</td>
+                                @if($product['seller_id']>0)
+                                <td>
+                                    {{$comission = round($total_price * $product['comissions']/100,2)}}
+                                </td>
+                                <td>{{$total_price - $comission}}</td>
+                                @else
+                                <td>0</td>
+                                <td>{{$total_price}}</td>
+                                @endif
                                 <td>
                                     <form action="{{route('seller.update-order-item-status')}}" method="post">
                                         @csrf

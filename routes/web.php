@@ -93,7 +93,7 @@ Route::group(['middleware' => 'auth:web', 'prefix' => 'user', 'as' => 'user.'], 
   Route::post('remove-delivery-address', [CartController::class, 'removeDeliveryAddress']);
 
   //Thanks Page //
-  Route::get('thanks', [CartController::class, 'thanks']);
+  Route::get('thanks', [CartController::class, 'thanks'])->name('thanks-page');
 
   // Show user Orders on user page //
   Route::get('your-orders/{id?}', [CartController::class, 'orders'])->name('your-orders');

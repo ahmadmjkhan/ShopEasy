@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('product_color')->nullable();
             $table->string('product_size')->nullable();
             $table->float('product_price')->nullable();
+            $table->float('comissions')->nullable();
             $table->string('courier_name')->nullable();
             $table->string('tracking_number')->nullable();
             $table->integer('product_quantity')->nullable();

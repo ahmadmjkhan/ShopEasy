@@ -302,7 +302,7 @@ $(document).ready(function () {
     // loadcart();
 
     $(document).on("submit", ".form_operation", function (e) {
-        alert("hello");
+       
         e.preventDefault();
 
         var url = $(this).attr("action");

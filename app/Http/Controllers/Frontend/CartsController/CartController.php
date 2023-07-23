@@ -4,17 +4,18 @@ namespace App\Http\Controllers\Frontend\CartsController;
 
 use App\Models\Cart;
 use App\Models\Order;
+use App\Models\Seller;
 use App\Models\Product;
+use App\Models\OrderLog;
 use Illuminate\Http\Request;
+use App\Models\ReturnRequest;
 use App\Models\ShippingCharge;
+use App\Models\ExchangeRequest;
 use App\Models\Product_Ordered;
 use App\Models\ProductAttribute;
 use App\Models\DeliveryAddresses;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\ExchangeRequest;
-use App\Models\OrderLog;
-use App\Models\ReturnRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\View;
@@ -474,6 +475,11 @@ class CartController extends Controller
                 // dd($getProductDetails);
                 $cartItem->admin_id = $getProductDetails['admin_id'];
                 $cartItem->seller_id = $getProductDetails['seller_id'];
+
+                if($getProductDetails['seller_id']>0){
+                    $sellercomissions = Seller::getSellerComissions($getProductDetails['seller_id']);
+                }
+                $cartItem->comissions = $sellercomissions;
                 $cartItem->product_id = $item['product_id'];
                 $cartItem->product_code = $getProductDetails['product_code'];
                 $cartItem->product_name = $getProductDetails['product_name'];

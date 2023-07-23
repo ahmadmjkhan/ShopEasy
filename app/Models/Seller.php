@@ -47,7 +47,16 @@ class Seller extends Authenticatable
 
 
     public static function getSellerComissions($sellerid){
-        $getSellerComission = Seller::select('comissions')->where('id',$sellerid)->first()->toArray();
-        return $getSellerComission['comissions'];
+        $sellerComissionCount = Seller::where('id',$sellerid)->count();
+
+        if($sellerComissionCount>0){
+            $getSellerComission = Seller::select('comissions')->where('id',$sellerid)->first()->toArray();
+            $sellerComission  = $getSellerComission['comissions'];
+        }else{
+            $sellerComission = 0;
+        }
+
+        return $sellerComission;
+       
     }
 }
